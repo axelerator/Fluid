@@ -1,2 +1,16 @@
 # KDevelop Custom Project File List
 Makefile
+main.cpp
+
+
+effect.h
+
+
+
+
+environment.cpp
+effectmanager.h
+effectmanager.cpp
+environment.h
+simpleeffect.cpp
+simpleeffect.h

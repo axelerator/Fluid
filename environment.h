@@ -24,9 +24,10 @@ public:
     int getScreenWidth() const { return screenWidth; }
     int getScreenHeight() const { return screenHeight; }
     int getFps() const { return fps; }
-
+    int getMatrixWidth() const { return matrixSize[0]; }
+    int getMatrixHeight() const { return matrixSize[1]; }
     bool loadConfig(std::string filename) { return true; }
-
+    bool *getMatrix() const { return matrix; }
     static Environment* getInstance();
   private:
     Environment();
@@ -37,6 +38,8 @@ public:
 
     // The one and only instance of the environemnt!
     static Environment *instance;
+    int matrixSize[2];
+    bool *matrix;
 };
 
 #endif

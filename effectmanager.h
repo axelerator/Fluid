@@ -23,7 +23,7 @@ class EffectManager {
     ~EffectManager();
 
     Environment* getEnvironment();
-
+    void init();
     void draw();
     void animate(int t);
 

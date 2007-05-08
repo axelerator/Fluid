@@ -17,8 +17,11 @@
 
 #include "effectmanager.h"
 #include "environment.h"
+#include <math.h>
 #include <time.h>
 int done = 0; // if true program will terminate
+bool interactive = true; // in interactive mode matrix is alter by mouse movement
+int cursor[2]; // stores position of the mousecursor in matrix coordinates
 
 bool initOpenGL(int w, int h) {
     glViewport(0, 0, (GLsizei) w, (GLsizei) h);
@@ -26,7 +29,7 @@ bool initOpenGL(int w, int h) {
     glColor3f(1.0f, 1.0f, 1.0f);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(30.0, 2.6667, 1.0, 100.0);
+    gluOrtho2D ( -2.0, 2.0, -1.0, 1.0);
     return (glGetError() == GL_NO_ERROR);
 }
 
@@ -38,7 +41,7 @@ int createWindow(std::string title, int width, int height) {
     }
 
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
-   // matrix = (bool*)malloc(sizeof(bool)*M_WIDTH*M_HEIGHT);
+    // matrix = (bool*)malloc(sizeof(bool)*M_WIDTH*M_HEIGHT);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -53,23 +56,43 @@ int createWindow(std::string title, int width, int height) {
 }
 
 void userInput() {
-      static SDL_Event event;
-         while(SDL_PollEvent(&event))
-        {
-            switch(event.type)
-            {
-                case SDL_KEYDOWN:
-                case SDL_QUIT:
-                done = 1;
+    Environment *env = EffectManager::getInstance()->getEnvironment();
+    static SDL_Event event;
+    while(SDL_PollEvent(&event)) {
+        switch(event.type) {
+        case SDL_MOUSEMOTION:
+            if ( interactive ) {
+
+              cursor[0] = (int) (((float)event.motion.x / env->getScreenWidth())*env->getMatrixWidth());
+              cursor[1] = env->getMatrixHeight() - (int) (((float)(event.motion.y) / env->getScreenHeight())*env->getMatrixHeight());
+              
+              bool *matrix = env->getMatrix();
+              memset(matrix, 0, env->getMatrixHeight() * env->getMatrixWidth());
+              int radius = 10;
+              for (int i = -radius; i < radius; ++i)
+                for (int t = -radius; t < radius; ++t) {
+                  int index[2] = { cursor[0] + i, cursor[1] + t };
+                  if ( ( index[0] > 0 ) && ( index[1] > 0 ) && ( index[0] < env->getMatrixWidth() ) && ( index[1] < env->getMatrixHeight() )) {
+                      float d[2] = { cursor[0] - index[0], cursor[1] - index[1] }; 
+                      float distance = sqrt(d[0]*d[0] + d[1] * d[1]);
+                      if (distance < radius)
+                        matrix[index[1]*env->getMatrixWidth() + index[0]] = 1;
+                  }
+                }
             }
-        } 
+            break;
+        case SDL_KEYDOWN:
+        case SDL_QUIT:
+            done = 1;
+        }
+    }
 }
 
 
 int main(int argc, char *argv[]) {
     std::cout << "Initializing Effect Master 3000...";
-
-    Environment *env = EffectManager::getInstance()->getEnvironment();
+    EffectManager *mgr = EffectManager::getInstance();
+    Environment *env = mgr->getEnvironment();
     env->loadConfig("dummy path");
 
     if (!createWindow("Effect Master 3000", env->getScreenWidth(), env->getScreenHeight()) ||
@@ -77,12 +100,13 @@ int main(int argc, char *argv[]) {
         std::cout << "error!" << std::endl;
         exit(1);
     }
-    
+
     int fps = env->getFps();
     int msPerFrame = 1000/fps;
     int passedMS = msPerFrame;
     unsigned int frameStart = 0;
     int rest = 0;
+    mgr->init();
     while(!done) {
         passedMS = frameStart - SDL_GetTicks();
         frameStart = SDL_GetTicks();
@@ -91,7 +115,8 @@ int main(int argc, char *argv[]) {
         SDL_GL_SwapBuffers();
         userInput();
         rest = msPerFrame - (SDL_GetTicks() - frameStart);
-        if (rest < 0 ) rest = 0;
+        if (rest < 0 )
+            rest = 0;
         SDL_Delay(rest);
     }
     return 0;

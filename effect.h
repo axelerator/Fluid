@@ -23,10 +23,11 @@ class Effect {
       env = Environment::getInstance();
     };
     virtual ~Effect() {};
+    virtual void init() {};
     virtual void draw() = 0;
     virtual void animate(int t) = 0;
 
-  private:
+  protected:
     const Environment* env;
 };
 

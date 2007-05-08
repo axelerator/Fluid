@@ -17,9 +17,13 @@ Environment::Environment() {
   screenWidth = 1067;
   screenHeight = 400;
   fps = 25;
+  matrixSize[0] = 128;
+  matrixSize[1] = 128;
+  matrix = (bool*)malloc(sizeof(bool)*matrixSize[0]*matrixSize[1]);
 }
 
 Environment::~Environment() {
+  free(matrix);
 }
 
 Environment* Environment::getInstance() {

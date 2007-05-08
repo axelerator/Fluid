@@ -16,3 +16,5 @@ simpleeffect.cpp
 simpleeffect.h
 /fluideffect.h
 /fluideffect.cpp
+/matrixviseffect.h
+/matrixviseffect.cpp

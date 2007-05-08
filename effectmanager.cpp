@@ -13,15 +13,21 @@
 #include "environment.h"
 #include "effect.h"
 #include "simpleeffect.h"
+#include "matrixviseffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
 EffectManager::EffectManager() {
   env = Environment::getInstance();
-  currentEffect = new SimpleEffect();
+  currentEffect = new MatrixVisEffect();
+
 }
 
 EffectManager::~EffectManager() {
+}
+
+void EffectManager::init() {
+  currentEffect->init();
 }
 
 EffectManager* EffectManager::getInstance() {

@@ -11,8 +11,6 @@
 //
 #include "matrixviseffect.h"
 #include <GL/gl.h>
-#include "effectmanager.h"
-#include "environment.h"
 MatrixVisEffect::MatrixVisEffect()
 : Effect() {
     xd = 4.0 / env->getMatrixWidth();

@@ -10,9 +10,6 @@ LD = gcc
 CPPFLAGS = -I./
 CFLAGS = -O2 -Wall -Wextra -Werror -Wno-unused-parameter -ansi -pedantic
 
-XLIBS = -lXmu -lXi -lX11
-GLLIBS = -lglut -lGLU -lGL
-
 # Linker flags
 LDFLAGS_LINUX    = -L/usr/X11R6/lib
 LDFLAGS_LINUX64  = -L/usr/X11R6/lib64
@@ -21,7 +18,7 @@ LDFLAGS          = $(LDFLAGS_COMMON) $(LDFLAGS_$(OS))
 
 # Linker libraries
 XLIBS            = -lXmu -lXi -lX11
-GLLIBS           = -lGLU -lGL -lSDL
+GLLIBS           = -lGLEW -lGLU -lGL -lSDL
 LDLIBS           = $(GLLIBS) $(XLIBS) -lm
 
 ifeq ($(findstring Linux,$(shell uname -s)),Linux)

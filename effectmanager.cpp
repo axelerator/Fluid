@@ -12,14 +12,14 @@
 #include "effectmanager.h"
 #include "environment.h"
 #include "effect.h"
-#include "simpleeffect.h"
+#include "simplesparkle.h"
 #include "matrixviseffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
 EffectManager::EffectManager() {
   env = Environment::getInstance();
-  currentEffect = new MatrixVisEffect();
+
 
 }
 
@@ -27,6 +27,8 @@ EffectManager::~EffectManager() {
 }
 
 void EffectManager::init() {
+  currentEffect = new SimpleSparkle();
+//  currentEffect = new MatrixVisEffect();
   currentEffect->init();
 }
 

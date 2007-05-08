@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <GL/glew.h>
 #include <GL/glu.h>
 #include <SDL/SDL.h>
 
@@ -100,7 +101,11 @@ int main(int argc, char *argv[]) {
         std::cout << "error!" << std::endl;
         exit(1);
     }
-
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {/* Problem: glewInit failed, something is seriously wrong. */
+      std::cout << "Error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
+      exit(1);
+    }
     int fps = env->getFps();
     int msPerFrame = 1000/fps;
     int passedMS = msPerFrame;

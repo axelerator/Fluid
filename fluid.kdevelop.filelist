@@ -18,3 +18,7 @@ simpleeffect.h
 /fluideffect.cpp
 /matrixviseffect.h
 /matrixviseffect.cpp
+RGBAbmpLoader.cpp
+RGBAbmpLoader.h
+/simplesparkle.h
+/simplesparkle.cpp

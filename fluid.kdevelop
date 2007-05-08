@@ -11,15 +11,15 @@
     <projectdirectory>.</projectdirectory>
     <absoluteprojectpath>false</absoluteprojectpath>
     <description></description>
-    <defaultencoding></defaultencoding>
+    <defaultencoding/>
     <versioncontrol>kdevsubversion</versioncontrol>
   </general>
   <kdevcustomproject>
     <run>
-      <mainprogram>/mnt/stuff/fhw/gma2/fluid/trunk/./fluid</mainprogram>
+      <mainprogram>mnt/stuff/fhw/gma2/fluid/trunk/fluid</mainprogram>
       <directoryradio>executable</directoryradio>
       <programargs></programargs>
-      <globaldebugarguments></globaldebugarguments>
+      <globaldebugarguments/>
       <globalcwd>/mnt/stuff/fhw/gma2/fluid/trunk</globalcwd>
       <useglobalprogram>false</useglobalprogram>
       <terminal>false</terminal>
@@ -27,6 +27,7 @@
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
       <envvars/>
+      <customdirectory>/</customdirectory>
     </run>
     <build>
       <buildtool>make</buildtool>
@@ -45,6 +46,9 @@
         <default/>
       </environments>
     </make>
+    <general>
+      <activedir></activedir>
+    </general>
   </kdevcustomproject>
   <kdevdebugger>
     <general>
@@ -56,6 +60,7 @@
       <breakonloadinglibs>true</breakonloadinglibs>
       <separatetty>false</separatetty>
       <floatingtoolbar>false</floatingtoolbar>
+      <programargs></programargs>
     </general>
     <display>
       <staticmembers>false</staticmembers>
@@ -130,7 +135,7 @@
     </qt>
     <references/>
     <codecompletion>
-      <automaticCodeCompletion>false</automaticCodeCompletion>
+      <automaticCodeCompletion>true</automaticCodeCompletion>
       <automaticArgumentsHint>true</automaticArgumentsHint>
       <automaticHeaderCompletion>true</automaticHeaderCompletion>
       <codeCompletionDelay>250</codeCompletionDelay>
@@ -151,6 +156,10 @@
       <usePermanentCaching>true</usePermanentCaching>
       <alwaysIncludeNamespaces>false</alwaysIncludeNamespaces>
       <includePaths>.;</includePaths>
+      <includeGlobalFunctions>true</includeGlobalFunctions>
+      <includeTypes>true</includeTypes>
+      <includeEnums>true</includeEnums>
+      <includeTypedefs>false</includeTypedefs>
     </codecompletion>
     <creategettersetter>
       <prefixGet></prefixGet>
@@ -185,13 +194,13 @@
   </cppsupportpart>
   <kdevdocumentation>
     <projectdoc>
-      <docsystem/>
-      <docurl/>
-      <usermanualurl/>
+      <docsystem></docsystem>
+      <docurl></docurl>
+      <usermanualurl></usermanualurl>
     </projectdoc>
   </kdevdocumentation>
   <ctagspart>
-    <customArguments/>
+    <customArguments></customArguments>
     <customTagfilePath>/mnt/stuff/fhw/gma2/fluid/trunk/tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>

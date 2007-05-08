@@ -21,7 +21,7 @@ LDFLAGS          = $(LDFLAGS_COMMON) $(LDFLAGS_$(OS))
 
 # Linker libraries
 XLIBS            = -lXmu -lXi -lX11
-GLLIBS           = -lglut -lGLU -lGL
+GLLIBS           = -lGLU -lGL -lSDL
 LDLIBS           = $(GLLIBS) $(XLIBS) -lm
 
 ifeq ($(findstring Linux,$(shell uname -s)),Linux)

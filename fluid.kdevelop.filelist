@@ -14,3 +14,5 @@ effectmanager.cpp
 environment.h
 simpleeffect.cpp
 simpleeffect.h
+/fluideffect.h
+/fluideffect.cpp

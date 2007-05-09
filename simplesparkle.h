@@ -41,6 +41,7 @@ public:
     GLfloat variance;
     GLfloat maxSpeed;
     GLfloat aging;
+    GLfloat pointSize;
 };
 
 #endif

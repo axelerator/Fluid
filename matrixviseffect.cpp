@@ -15,7 +15,8 @@ MatrixVisEffect::MatrixVisEffect()
 : Effect() {
     xd = 4.0 / env->getMatrixWidth();
     yd = 2.0 / env->getMatrixHeight();
-
+    glPointSize(5.0);
+    glEnable(GL_POINT_SMOOTH);
 }
 
 

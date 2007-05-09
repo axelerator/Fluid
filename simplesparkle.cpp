@@ -29,6 +29,7 @@ SimpleSparkle::SimpleSparkle(EffectSettings *conf)
     variance = conf->getFloat("variance");
     maxSpeed = conf->getFloat("maxspeed");
     aging = conf->getFloat("aging");
+    pointSize = conf->getFloat("pointsize");
     init();
 }
 
@@ -67,7 +68,7 @@ void SimpleSparkle::init() {
         colorArray[cidx] = 1.0;
         colorArray[cidx+1] = 1.0;
         colorArray[cidx+2] = 1.0;
-        colorArray[cidx+3] = 0.9;
+        colorArray[cidx+3] = 0.0;
       }
         
   glEnableClientState(GL_VERTEX_ARRAY);
@@ -78,6 +79,7 @@ void SimpleSparkle::init() {
 }
 
 SimpleSparkle::~SimpleSparkle() {
+  // TODO: remove texture 
   free(vertexArray);
   free(colorArray);
   free(vel);
@@ -92,11 +94,13 @@ void SimpleSparkle::animate(int t) {
   for (int i = 0; i < mh; ++i )
       for (int t = 0; t < mw; ++t ) {
         cidx = (i*mw+t)*4;
-        vid = (i*mh+t)*2; 
+        vid = (i*mw+t)*2; 
         if (( matrix[i*mw+t] ) && ( colorArray[cidx+3] < 0.9 )) {
           colorArray[cidx+3] = 0.9;
-          vertexArray[vid] = t*xd - 2.0;
-          vertexArray[vid+1] =  i * yd - 1.0;
+          if (maxSpeed > 0.0) {
+            vertexArray[vid] = t*xd - 2.0;
+            vertexArray[vid+1] =  i * yd - 1.0;
+          }
           angle = ((float)rand()/RAND_MAX) * M_PI * 2.0;
           speed = ((float)rand()/RAND_MAX) * maxSpeed;
           vel[vid] = sin(angle)*speed;
@@ -107,11 +111,11 @@ void SimpleSparkle::animate(int t) {
            vertexArray[vid]   += vel[vid];
            vertexArray[vid+1] += vel[vid+1];
         }
-/*        if ( matrix[i*mw+t] )
+        /*if ( matrix[i*mw+t] )
           colorArray[cidx+3] = 1.0;
         else
           colorArray[cidx+3] = 0.0;*/
-      }
+     }
 }
 
 void SimpleSparkle::draw() {
@@ -138,7 +142,7 @@ void SimpleSparkle::draw() {
     if( maxSize > 100.0f )
         maxSize = 100.0f;
 
-    glPointSize( 35.0 );
+    glPointSize( pointSize );
 
     // The alpha of a point is calculated to allow the fading of points 
     // instead of shrinking them past a defined threshold size. The threshold 

@@ -13,24 +13,69 @@
 #include <iostream>
 #include "RGBAbmpLoader.h"
 #include <math.h>
-
+#include "effectsettings.h"
 
 
 SimpleSparkle::SimpleSparkle()
 : Effect() {
+    variance = 0.3;
+    maxSpeed = 0.0;
+    aging = 0.96;
+    init();
+}
+
+SimpleSparkle::SimpleSparkle(EffectSettings *conf)
+: Effect() {
+    variance = conf->getFloat("variance");
+    maxSpeed = conf->getFloat("maxspeed");
+    aging = conf->getFloat("aging");
+    init();
+}
+
+
+void SimpleSparkle::init() {
     int mw = env->getMatrixWidth(), mh = env->getMatrixHeight();
     xd = 4.0 / mw;
     yd = 2.0 / mh;
     count = mw * mh;
-/*    variance = 0.0;
-    maxSpeed = 0.03;
-    aging = 0.9;*/
-    
-    variance = 0.3;
-    maxSpeed = 0.0;
-    aging = 0.96;
-}
 
+ RGBAbmp *pic = loadBmp("rgba.bmp");
+  glGenTextures(1, &particleTex);
+  glBindTexture(GL_TEXTURE_2D, particleTex);
+  int textureType = GL_RGB;
+  if (pic->bpp == 32) 
+  textureType = GL_RGBA ;
+  gluBuild2DMipmaps(GL_TEXTURE_2D, pic->bpp/8, pic->width, 
+                                    pic->height, textureType, GL_UNSIGNED_BYTE, pic->data);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);	
+  delete pic->data;
+  delete pic;
+
+  
+  vertexArray = (GLfloat*)malloc(sizeof(GLfloat) * 2 * mw * mh) ;
+  vel = (GLfloat*)malloc(sizeof(GLfloat) * 2 * mw * mh) ;
+  colorArray  = (GLfloat*)malloc(sizeof(GLfloat) * 4 * count) ;
+  for (int i = 0; i < mh; ++i )
+      for (int t = 0; t < mw; ++t ) {
+        int vidx = (i*mw+t)*2;
+        vertexArray[vidx] = t*xd - 2.0 +  ((((float)rand()/RAND_MAX)*variance)-variance*0.5);
+        vertexArray[vidx+1] =  i * yd - 1.0 + ((((float)rand()/RAND_MAX)*variance)-variance*0.5);
+        vel[vidx] = 0.0;
+        vel[vidx+1] = 0.0;
+        int cidx = (i*mw+t)*4;
+        colorArray[cidx] = 1.0;
+        colorArray[cidx+1] = 1.0;
+        colorArray[cidx+2] = 1.0;
+        colorArray[cidx+3] = 0.9;
+      }
+        
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+  
+  glVertexPointer(2, GL_FLOAT,0, vertexArray);
+  glColorPointer(4, GL_FLOAT,0, colorArray);
+}
 
 SimpleSparkle::~SimpleSparkle() {
   free(vertexArray);
@@ -119,46 +164,5 @@ void SimpleSparkle::draw() {
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-}
-
-void SimpleSparkle::init() {
-  Effect::init();
-  RGBAbmp *pic = loadBmp("rgba.bmp");
-  glGenTextures(1, &particleTex);
-  glBindTexture(GL_TEXTURE_2D, particleTex);
-  int textureType = GL_RGB;
-  if (pic->bpp == 32) 
-  textureType = GL_RGBA ;
-  gluBuild2DMipmaps(GL_TEXTURE_2D, pic->bpp/8, pic->width, 
-                                    pic->height, textureType, GL_UNSIGNED_BYTE, pic->data);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);	
-  delete pic->data;
-  delete pic;
-  int mw = env->getMatrixWidth(), mh = env->getMatrixHeight();
-    std::cout << "count later :" << count << std::endl;
-  
-  vertexArray = (GLfloat*)malloc(sizeof(GLfloat) * 2 * mw * mh) ;
-  vel = (GLfloat*)malloc(sizeof(GLfloat) * 2 * mw * mh) ;
-  colorArray  = (GLfloat*)malloc(sizeof(GLfloat) * 4 * count) ;
-  for (int i = 0; i < mh; ++i )
-      for (int t = 0; t < mw; ++t ) {
-        int vidx = (i*mw+t)*2;
-        vertexArray[vidx] = t*xd - 2.0 +  ((((float)rand()/RAND_MAX)*variance)-variance*0.5);
-        vertexArray[vidx+1] =  i * yd - 1.0 + ((((float)rand()/RAND_MAX)*variance)-variance*0.5);
-        vel[vidx] = 0.0;
-        vel[vidx+1] = 0.0;
-        int cidx = (i*mw+t)*4;
-        colorArray[cidx] = 1.0;
-        colorArray[cidx+1] = 1.0;
-        colorArray[cidx+2] = 1.0;
-        colorArray[cidx+3] = 0.9;
-      }
-        
-  glEnableClientState(GL_VERTEX_ARRAY);
-  glEnableClientState(GL_COLOR_ARRAY);
-  
-  glVertexPointer(2, GL_FLOAT,0, vertexArray);
-  glColorPointer(4, GL_FLOAT,0, colorArray);
 }
 

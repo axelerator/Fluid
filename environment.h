@@ -13,7 +13,8 @@
 #define ENVIRONMENT_H
 
 #include <string>
-
+#include <vector>
+#include "effectsettings.h"
 /**
 	@author Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>
 */
@@ -26,9 +27,11 @@ public:
     int getFps() const { return fps; }
     int getMatrixWidth() const { return matrixSize[0]; }
     int getMatrixHeight() const { return matrixSize[1]; }
-    bool loadConfig(std::string filename) { return true; }
+    bool loadConfig(std::string filename);
     bool *getMatrix() const { return matrix; }
     static Environment* getInstance();
+    std::size_t getEffectCount();
+    EffectSettings * getConfigFor(std::size_t n);
   private:
     Environment();
 
@@ -40,6 +43,8 @@ public:
     static Environment *instance;
     int matrixSize[2];
     bool *matrix;
+    std::vector<EffectSettings> configurations;
+    EffectSettings globalconfig;
 };
 
 #endif

@@ -83,6 +83,15 @@ void userInput() {
             }
             break;
         case SDL_KEYDOWN:
+          switch (event.key.keysym.sym) {
+            case SDLK_RIGHT: EffectManager::getInstance()->nextEffect(); break;
+            case SDLK_LEFT: EffectManager::getInstance()->previousEffect(); break;
+            case SDLK_q: 
+            case SDLK_ESCAPE: 
+                              done = 1; break;
+            default:;
+          }
+          break;
         case SDL_QUIT:
             done = 1;
         }
@@ -94,7 +103,7 @@ int main(int argc, char *argv[]) {
     std::cout << "Initializing Effect Master 3000...";
     EffectManager *mgr = EffectManager::getInstance();
     Environment *env = mgr->getEnvironment();
-    env->loadConfig("dummy path");
+    env->loadConfig("effectmaster.conf");
 
     if (!createWindow("Effect Master 3000", env->getScreenWidth(), env->getScreenHeight()) ||
             !initOpenGL(env->getScreenWidth(), env->getScreenHeight())) {
@@ -113,7 +122,7 @@ int main(int argc, char *argv[]) {
     int rest = 0;
     mgr->init();
     while(!done) {
-        passedMS = frameStart - SDL_GetTicks();
+        passedMS = SDL_GetTicks() - frameStart;
         frameStart = SDL_GetTicks();
         EffectManager::getInstance()->animate(passedMS);
         EffectManager::getInstance()->draw();

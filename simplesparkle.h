@@ -14,20 +14,24 @@
 #include <GL/glew.h>
 #include "effect.h"
 
+class EffectSettings;
+
 /**
 	@author Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>
 */
 class SimpleSparkle : public Effect {
 public:
     SimpleSparkle();
+    SimpleSparkle(EffectSettings *conf);
 
     ~SimpleSparkle();
 
     virtual void animate(int t);
     virtual void draw();
-    virtual void init();
 
   private:
+    void init();
+  
     float xd,yd;
     GLuint particleTex;
     GLfloat *vertexArray;

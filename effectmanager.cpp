@@ -1,7 +1,7 @@
 //
 // C++ Implementation: effectmanager
 //
-// Description: 
+// Description:
 //
 //
 // Author: Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>, (C) 2007
@@ -13,40 +13,61 @@
 #include "environment.h"
 #include "effect.h"
 #include "simplesparkle.h"
+#include "simpleeffect.h"
 #include "matrixviseffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
-EffectManager::EffectManager() {
-  env = Environment::getInstance();
-
-
+EffectManager::EffectManager() :  currentEffect(0), currentEffectId(0){
+    env = Environment::getInstance();
 }
 
-EffectManager::~EffectManager() {
-}
+EffectManager::~EffectManager() {}
 
 void EffectManager::init() {
-  currentEffect = new SimpleSparkle();
-//  currentEffect = new MatrixVisEffect();
-  currentEffect->init();
+    createEffect(currentEffectId);
 }
 
 EffectManager* EffectManager::getInstance() {
-  if (!instance) {
-    instance = new EffectManager();
-  }
-  return instance;
+    if (!instance) {
+        instance = new EffectManager();
+    }
+    return instance;
 }
 
 Environment* EffectManager::getEnvironment() {
-  return env;
+    return env;
 }
 
 void EffectManager::draw() {
-  currentEffect->draw();
+    currentEffect->draw();
 }
 
 void EffectManager::animate(int t) {
-  currentEffect->animate(t);
+    currentEffect->animate(t);
 }
+
+void EffectManager::nextEffect() {
+  if ( currentEffectId < (env->getEffectCount()-1) )
+    createEffect(++currentEffectId);
+}
+
+void EffectManager::previousEffect() {
+  if ( currentEffectId > 0)
+    createEffect(--currentEffectId);
+}
+
+void EffectManager::createEffect(std::size_t n) {
+    if  ( currentEffect != 0 )
+      delete currentEffect;
+    EffectSettings *nextSetting = env->getConfigFor(currentEffectId );
+    std::cout << "Switching to next Effect.." << nextSetting->getName() << std::endl;
+    if ( !nextSetting->getName().compare("simplesparkle") )
+      currentEffect = new SimpleSparkle(nextSetting);
+    else if ( !nextSetting->getName().compare("simple") )
+      currentEffect = new SimpleEffect();
+    else if ( !nextSetting->getName().compare("matrixvis") )
+      currentEffect = new MatrixVisEffect();
+
+}
+

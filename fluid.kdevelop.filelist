@@ -22,3 +22,6 @@ RGBAbmpLoader.cpp
 RGBAbmpLoader.h
 /simplesparkle.h
 /simplesparkle.cpp
+/effectsettings.h
+/effectsettings.cpp
+effectmaster.conf

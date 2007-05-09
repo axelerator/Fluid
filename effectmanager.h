@@ -11,7 +11,7 @@
 //
 #ifndef EFFECTMANAGER_H
 #define EFFECTMANAGER_H
-
+#include <cstddef>
 class Environment;
 class Effect;
 
@@ -27,16 +27,27 @@ class EffectManager {
     void draw();
     void animate(int t);
 
+
+
     static EffectManager* getInstance();
+    void nextEffect();
+    void previousEffect();
 
   private:
     EffectManager();
+    void createEffect(std::size_t n);
 
     Environment *env;
     Effect *currentEffect;
 
     // The one and only effect manager instance!
     static EffectManager *instance;
+    
+    /**
+     *  holds the index of the configuration of the
+     *  the current effect.
+     */
+    std::size_t currentEffectId;
 };
 
 #endif

@@ -28,7 +28,7 @@ public:
     void addProperty(std::string key, std::string value);
     float getFloat(std::string key);
     int getInteger(std::string key);
-
+    const std::string& getString(std::string key);
 private:
     std::string name;
     std::map <std::string, std::string> properties ;

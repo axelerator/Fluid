@@ -21,7 +21,6 @@
 #include <math.h>
 #include <time.h>
 int done = 0; // if true program will terminate
-bool interactive = true; // in interactive mode matrix is alter by mouse movement
 int cursor[2]; // stores position of the mousecursor in matrix coordinates
 
 bool initOpenGL(int w, int h) {
@@ -62,7 +61,7 @@ void userInput() {
     while(SDL_PollEvent(&event)) {
         switch(event.type) {
         case SDL_MOUSEMOTION:
-            if ( interactive ) {
+            if ( env->getMousesimulation() ) {
 
               cursor[0] = (int) (((float)event.motion.x / env->getScreenWidth())*env->getMatrixWidth());
               cursor[1] = env->getMatrixHeight() - (int) (((float)(event.motion.y) / env->getScreenHeight())*env->getMatrixHeight());

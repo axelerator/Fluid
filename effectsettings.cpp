@@ -29,7 +29,7 @@ void EffectSettings::addProperty(std::string key, std::string value) {
 
 
 /**
- * @return gets the value for 'key' and try to convert it to a float
+ * @return the value for 'key' and try to converted it to a float
  */
 float EffectSettings::getFloat(std::string key) {
   return atof(properties[key].c_str());
@@ -37,9 +37,16 @@ float EffectSettings::getFloat(std::string key) {
 
 
 /**
- * @return gets the value for 'key' and try to convert it to an integer
+ * @return the value for 'key' and try to converted it to an integer
  */
 int EffectSettings::getInteger(std::string key)
 {
   return atoi(properties[key].c_str());
+}
+
+/**
+ * @return the value for 'key'
+ */
+const std::string& EffectSettings::getString(std::string key) {
+  return properties[key];
 }

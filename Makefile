@@ -13,13 +13,13 @@ CFLAGS = -O2 -Wall -Wextra -Werror -Wno-unused-parameter -ansi -pedantic
 # Linker flags
 LDFLAGS_LINUX    = -L/usr/X11R6/lib
 LDFLAGS_LINUX64  = -L/usr/X11R6/lib64
-LDFLAGS_COMMON   =
+LDFLAGS_COMMON   = -Lvrf/lib
 LDFLAGS          = $(LDFLAGS_COMMON) $(LDFLAGS_$(OS))
 
 # Linker libraries
 XLIBS            = -lXmu -lXi -lX11
 GLLIBS           = -lGLEW -lGLU -lGL -lSDL
-LDLIBS           = $(GLLIBS) $(XLIBS) -lm
+LDLIBS           = $(GLLIBS) $(XLIBS) -lvrf -lm
 
 ifeq ($(findstring Linux,$(shell uname -s)),Linux)
   OS = LINUX

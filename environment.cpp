@@ -13,10 +13,12 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include "vrf/include/OptionSender.h"
+
 Environment* Environment::instance = 0;
 
 Environment::Environment() 
-: globalconfig(std::string("environment")) {
+: mousesimulation(true), globalconfig(std::string("environment")) {
 
 }
 
@@ -92,6 +94,11 @@ bool Environment::loadConfig(std::string filename) {
   matrixSize[0] = globalconfig.getInteger("matrixwidth");
   matrixSize[1] = globalconfig.getInteger("matrixheight");
   matrix = (bool*)malloc(sizeof(bool)*matrixSize[0]*matrixSize[1]);
+  mousesimulation = globalconfig.getString("mousesimulation").compare("off") != 0;
+  if (!mousesimulation) {
+    OptionSender* sender = new OptionSender();
+    sender->SetNewOption(BOOLMATRIX, matrixSize[0], matrixSize[1], matrix);
+  }
   return true; 
 }
 

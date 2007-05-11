@@ -32,12 +32,18 @@ public:
     static Environment* getInstance();
     std::size_t getEffectCount();
     EffectSettings * getConfigFor(std::size_t n);
+    bool getMousesimulation() const { return mousesimulation; }
+	
   private:
     Environment();
 
     int screenWidth;
     int screenHeight;
     int fps;
+    /**
+     * defines wther input is take from the mouse ot the table
+     */
+    bool mousesimulation;
 
     // The one and only instance of the environemnt!
     static Environment *instance;

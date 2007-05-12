@@ -1,0 +1,20 @@
+== Installation ==
+
+Vor dem builden muss eine aktuelle Version der VRF-Bibliothek ins /vrf/lib Verzeichnis kopiert werden
+Sie sollte dan libvrf.so heißen, der Linker sucht allerdings manchmal nach einer .so.1 und das executable will dann eine vrf.so haben -> ggf symbolic links erstellen
+
+zum Builden müssen folgende Syslibs vorhanden sein
+ * GL/GLU
+ * SDL
+ * GLEW
+ * opencv
+ ..unter Ubuntu zumindest alle bis auf opencv im APT
+ 
+Evtl muss zum Linken der Pfad zur libopencv angepasst werden
+ 
+== Benutzung ==
+
+Zum Ausführen müssen die Pfade zu opencv und zur vrf.so im LD_LIBRARY_PATH gesetzt werden also z.B.
+# LD_LIBRARY_PATH="/usr/local/opencv/;vrf/lib/" ./vrf
+ 
+Im Projektverzeichnis liegt eine effectmaster.conf über die die Anwendung configuriert werden kann. Über moussimulation = [on/off] kann bestimmt werden ob das Programm den input vom BVF oder von der Maus nimmt. Der Rest is selbsterklärend hoffe ich.

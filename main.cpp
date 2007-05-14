@@ -68,7 +68,7 @@ void userInput() {
               
               bool *matrix = env->getMatrix();
               memset(matrix, 0, env->getMatrixHeight() * env->getMatrixWidth());
-              int radius = 10;
+              int radius =env->getMouseRadius() ;
               for (int i = -radius; i < radius; ++i)
                 for (int t = -radius; t < radius; ++t) {
                   int index[2] = { cursor[0] + i, cursor[1] + t };

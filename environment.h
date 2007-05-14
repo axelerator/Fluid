@@ -33,6 +33,7 @@ public:
     std::size_t getEffectCount();
     EffectSettings * getConfigFor(std::size_t n);
     bool getMousesimulation() const { return mousesimulation; }
+    int getMouseRadius() const { return mouseRadius; }
 	
   private:
     Environment();
@@ -51,6 +52,7 @@ public:
     bool *matrix;
     std::vector<EffectSettings> configurations;
     EffectSettings globalconfig;
+    int mouseRadius;
 };
 
 #endif

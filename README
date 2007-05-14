@@ -18,3 +18,6 @@ Zum Ausführen müssen die Pfade zu opencv und zur vrf.so im LD_LIBRARY_PATH ges
 # LD_LIBRARY_PATH="/usr/local/opencv/;vrf/lib/" ./vrf
  
 Im Projektverzeichnis liegt eine effectmaster.conf über die die Anwendung configuriert werden kann. Über moussimulation = [on/off] kann bestimmt werden ob das Programm den input vom BVF oder von der Maus nimmt. Der Rest is selbsterklärend hoffe ich.
+
+Für eine detailierte Installationsanleitung bitte hier schauen:
+http://83.246.96.31/trac/fluid/wiki/Installation

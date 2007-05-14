@@ -12,7 +12,9 @@
 #ifndef FLUIDEFFECT_H
 #define FLUIDEFFECT_H
 
-#include <effect.h>
+
+#include <GL/gl.h>
+#include "effect.h"
 
 #define IX(i,j) ((i)+(N+2)*(j))
 
@@ -26,7 +28,8 @@ class FluidEffect : public Effect
 public:
     FluidEffect();
     ~FluidEffect();
-
+    virtual void draw();
+    virtual void animate(int t);
   private:
     void free_data ( void );
     void clear_data ( void );
@@ -55,6 +58,14 @@ public:
     int mouse_down[3];
     int omx, omy, mx, my;
 
+    std::size_t mw, mh;
+    bool *lastMatrix;
+    bool *activeMatrix;
+    GLfloat *vertexArray;
+    GLfloat *velocityArray;
+    GLfloat *colorArray;
+    std::size_t count;
+    std::size_t searchRadius;
 };
 
 #endif

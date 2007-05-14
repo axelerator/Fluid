@@ -15,7 +15,8 @@
 #include "simplesparkle.h"
 #include "simpleeffect.h"
 #include "matrixviseffect.h"
-
+#include "changedetector.h"
+#include "fluideffect.h"
 EffectManager* EffectManager::instance = 0;
 
 EffectManager::EffectManager() :  currentEffect(0), currentEffectId(0){
@@ -68,6 +69,14 @@ void EffectManager::createEffect(std::size_t n) {
       currentEffect = new SimpleEffect();
     else if ( !nextSetting->getName().compare("matrixvis") )
       currentEffect = new MatrixVisEffect();
+    else if ( nextSetting->getName().compare("changedetector") == 0 )
+     currentEffect = new ChangeDetector();
+    else if ( nextSetting->getName().compare("fluid") == 0 )
+     currentEffect = new FluidEffect();
+    else {
+      std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
+      exit(1);
+    }
 
 }
 

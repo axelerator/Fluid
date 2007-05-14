@@ -26,3 +26,7 @@ RGBAbmpLoader.h
 /effectsettings.cpp
 effectmaster.conf
 README
+
+
+changedetector.cpp
+changedetector.h

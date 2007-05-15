@@ -23,14 +23,16 @@ This class simulates a fluid like effect on basis of an algorithm by Jos Stam
 
 	@author Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>
 */
-class FluidEffect : public Effect
-{
-public:
+class FluidEffect : public Effect {
+  public:
     FluidEffect();
     ~FluidEffect();
     virtual void draw();
     virtual void animate(int t);
+
   private:
+    void init();
+
     void free_data ( void );
     void clear_data ( void );
     int  allocate_data ( void );
@@ -50,10 +52,10 @@ public:
     int N;
     float dt, diff, visc;
     float force, source;
-    
+
     float * u, * v, * u_prev, * v_prev;
     float * dens, * dens_prev;
-    
+
     int win_x, win_y;
     int mouse_down[3];
     int omx, omy, mx, my;

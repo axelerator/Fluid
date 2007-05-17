@@ -13,6 +13,11 @@
 
 #include <math.h>
 
+/**
+ * Creates a changedetector.
+ * 
+ * \todo Make some settings configurable.
+ */
 ChangeDetector::ChangeDetector() {
   env = Environment::getInstance();
 
@@ -30,7 +35,9 @@ ChangeDetector::ChangeDetector() {
   memset(velocityArray, 0, 2 * count * sizeof(float));
 }
 
-
+/**
+ * Deletes the changedetector.
+ */
 ChangeDetector::~ChangeDetector() {
   delete[] lastMatrix;
   delete[] activeMatrix;
@@ -39,9 +46,14 @@ ChangeDetector::~ChangeDetector() {
 
 /**
  * Updates the velocity and change detection. Call this method
- * periodically (i.e. in Effect::animate()) for best results.
+ * periodically (i.e. in Effect::animate()) for best results, as
+ * the detection of changes relies on the differences between
+ * the current matrix and the matrix from  the previous call to 
+ * update().
  */
 void ChangeDetector::update() {
+  // For performance reasons, all values are treated as integers so
+  // that the comparisons can be executed for several bits at once.
   int intSize = (count * sizeof(bool)) / sizeof(int);
   int *intMatrix = (int*) env->getMatrix();
   int *actMatrix = (int*) activeMatrix;
@@ -94,10 +106,30 @@ void ChangeDetector::update() {
   memcpy(lastMatrix, env->getMatrix(), count * sizeof(bool));
 }
 
+/**
+ * Check for activity at a certain position.
+ * 
+ * \param x X coordinate of position.
+ * \param y Y coordinate of position.
+ * 
+ * \return True if there is activity at the position, else false.
+ */
 bool ChangeDetector::isActive(unsigned int x, unsigned int y) {
   return activeMatrix[x + y * width];
 }
 
+/**
+ * Gets the force and direction of the changes at a certain position.
+ * The vector between the position in the arguments and the returned
+ * position indicates the direction and the force of the activity. The
+ * returned array contains two elements, the first value corresponds 
+ * to the X coordinate and the second value to the Y coordinate.
+ * 
+ * \param x X coordinate of position.
+ * \param y Y coordinate of position.
+ * 
+ * \return Array with two elements indicating force and direction.
+ */
 const float* ChangeDetector::getVelocity(unsigned int x, unsigned int y) {
   return const_cast<const float*>(&velocityArray[(x + y * width) * 2]);
 }

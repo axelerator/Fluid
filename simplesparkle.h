@@ -31,7 +31,7 @@ public:
 
   private:
     void init();
-  
+
     float xd,yd;
     GLuint particleTex;
     GLfloat *vertexArray;

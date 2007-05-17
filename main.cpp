@@ -30,6 +30,7 @@ bool initOpenGL(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D ( -2.0, 2.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
     return (glGetError() == GL_NO_ERROR);
 }
 
@@ -109,22 +110,26 @@ int main(int argc, char *argv[]) {
         std::cout << "error!" << std::endl;
         exit(1);
     }
+
     GLenum err = glewInit();
     if (GLEW_OK != err) {/* Problem: glewInit failed, something is seriously wrong. */
       std::cout << "Error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
       exit(1);
     }
+
     int fps = env->getFps();
     int msPerFrame = 1000/fps;
     int passedMS = msPerFrame;
     unsigned int frameStart = 0;
     int rest = 0;
+
     mgr->init();
+
     while(!done) {
         passedMS = SDL_GetTicks() - frameStart;
         frameStart = SDL_GetTicks();
-        EffectManager::getInstance()->animate(passedMS);
-        EffectManager::getInstance()->draw();
+        mgr->animate(passedMS);
+        mgr->draw();
         SDL_GL_SwapBuffers();
         userInput();
         rest = msPerFrame - (SDL_GetTicks() - frameStart);
@@ -132,5 +137,6 @@ int main(int argc, char *argv[]) {
             rest = 0;
         SDL_Delay(rest);
     }
+
     return 0;
 }

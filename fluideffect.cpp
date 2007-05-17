@@ -15,7 +15,7 @@
 #include <math.h>
 
 FluidEffect::FluidEffect(): Effect() {
-  N = 128;
+  N = env->getMatrixWidth() ;
   dt = 0.1f;
   diff = 0.0f;
   visc = 0.0f;

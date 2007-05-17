@@ -17,6 +17,8 @@
 #include "matrixviseffect.h"
 #include "changedetector.h"
 #include "fluideffect.h"
+#include "waveeffect.h"
+
 EffectManager* EffectManager::instance = 0;
 
 EffectManager::EffectManager() :  currentEffect(0), currentEffectId(0){
@@ -26,7 +28,7 @@ EffectManager::EffectManager() :  currentEffect(0), currentEffectId(0){
 EffectManager::~EffectManager() {}
 
 void EffectManager::init() {
-    createEffect(currentEffectId);
+  createEffect(currentEffectId);
 }
 
 EffectManager* EffectManager::getInstance() {
@@ -59,24 +61,37 @@ void EffectManager::previousEffect() {
 }
 
 void EffectManager::createEffect(std::size_t n) {
-    if  ( currentEffect != 0 )
-      delete currentEffect;
-    EffectSettings *nextSetting = env->getConfigFor(currentEffectId );
-    std::cout << "Switching to next Effect.." << nextSetting->getName() << std::endl;
-    if ( !nextSetting->getName().compare("simplesparkle") )
-      currentEffect = new SimpleSparkle(nextSetting);
-    else if ( !nextSetting->getName().compare("simple") )
-      currentEffect = new SimpleEffect();
-    else if ( !nextSetting->getName().compare("matrixvis") )
-      currentEffect = new MatrixVisEffect();
-    else if ( nextSetting->getName().compare("changedetector") == 0 )
-     currentEffect = new ChangeDetector();
-    else if ( nextSetting->getName().compare("fluid") == 0 )
-     currentEffect = new FluidEffect();
-    else {
-      std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
-      exit(1);
-    }
+  if  ( currentEffect != 0 ) {
+    delete currentEffect;
+    currentEffect = 0;
 
+    // Restore all OpenGL settings that could have been changed by the last effect.
+    glPopAttrib();
+    glPopClientAttrib();
+  }
+
+  // Save all OpenGL settings to restore them after changing the effect.
+  glPushAttrib(GL_ALL_ATTRIB_BITS);
+  glPushClientAttrib(GL_ALL_ATTRIB_BITS);
+
+  EffectSettings *nextSetting = env->getConfigFor(currentEffectId );
+  std::cout << "Switching to Effect: " << nextSetting->getName() << std::endl;
+
+  if (nextSetting->getName() == "simplesparkle")
+    currentEffect = new SimpleSparkle(nextSetting);
+  else if (nextSetting->getName() == "simple")
+    currentEffect = new SimpleEffect();
+  else if (nextSetting->getName() == "matrixvis")
+    currentEffect = new MatrixVisEffect();
+  else if (nextSetting->getName() == "changedetector")
+    currentEffect = new ChangeDetector();
+  else if (nextSetting->getName() == "fluid")
+    currentEffect = new FluidEffect();
+  else if (nextSetting->getName() == "wave")
+    currentEffect = new WaveEffect(nextSetting);
+  else {
+    std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
+    exit(1);
+  }
 }
 

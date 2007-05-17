@@ -30,3 +30,7 @@ README
 
 changedetector.cpp
 changedetector.h
+
+
+waveeffect.h
+waveeffect.cpp

@@ -28,17 +28,18 @@ WaveEffect::WaveEffect(EffectSettings *conf)
 
   indices = new GLuint[(height-1) * (width*2)];
 
-  for (unsigned int i = 0; i < height; ++i )
-      for (unsigned int t = 0; t < width; ++t ) {
-        int vidx = (i*width+t)*3;
-        vertexArray[vidx] = t*xd - 2.0 ;
-        vertexArray[vidx+1] =  i * yd - 1.0;
-        vertexArray[vidx+2] =  0.0;
-        int cidx = (i*width+t)*3;
-        colorArray[cidx] = 0.2;
-        colorArray[cidx+1] = 0.2;
-        colorArray[cidx+2] = 0.2;
-      }
+  for (unsigned int i = 0; i < height; ++i ) {
+    for (unsigned int t = 0; t < width; ++t ) {
+      int vidx = (i*width+t)*3;
+      vertexArray[vidx] = t*xd - 2.0 ;
+      vertexArray[vidx+1] =  i * yd - 1.0;
+      vertexArray[vidx+2] =  0.0;
+      int cidx = (i*width+t)*3;
+      colorArray[cidx] = 0.2;
+      colorArray[cidx+1] = 0.2;
+      colorArray[cidx+2] = 0.2;
+    }
+  }
 
   for (unsigned int y = 1; y < height-1; ++y ) {
     for (unsigned int x = 1; x < width-1; ++x ) {

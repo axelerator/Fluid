@@ -34,3 +34,7 @@ changedetector.h
 
 waveeffect.h
 waveeffect.cpp
+
+
+changeeffect.cpp
+changeeffect.h

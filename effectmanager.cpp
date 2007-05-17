@@ -15,7 +15,7 @@
 #include "simplesparkle.h"
 #include "simpleeffect.h"
 #include "matrixviseffect.h"
-#include "changedetector.h"
+#include "changeeffect.h"
 #include "fluideffect.h"
 #include "waveeffect.h"
 
@@ -43,11 +43,15 @@ Environment* EffectManager::getEnvironment() {
 }
 
 void EffectManager::draw() {
+  if(currentEffect) {
     currentEffect->draw();
+  }
 }
 
 void EffectManager::animate(int t) {
+  if(currentEffect) {
     currentEffect->animate(t);
+  }
 }
 
 void EffectManager::nextEffect() {
@@ -84,7 +88,7 @@ void EffectManager::createEffect(std::size_t n) {
   else if (nextSetting->getName() == "matrixvis")
     currentEffect = new MatrixVisEffect();
   else if (nextSetting->getName() == "changedetector")
-    currentEffect = new ChangeDetector();
+    currentEffect = new ChangeEffect();
   else if (nextSetting->getName() == "fluid")
     currentEffect = new FluidEffect();
   else if (nextSetting->getName() == "wave")

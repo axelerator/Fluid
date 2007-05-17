@@ -65,16 +65,19 @@ void userInput() {
             if ( env->getMousesimulation() ) {
 
               cursor[0] = (int) (((float)event.motion.x / env->getScreenWidth())*env->getMatrixWidth());
-              cursor[1] = env->getMatrixHeight() - (int) (((float)(event.motion.y) / env->getScreenHeight())*env->getMatrixHeight());
-              
+              cursor[1] = env->getMatrixHeight() - (int) (((float)(event.motion.y) /
+                          env->getScreenHeight())*env->getMatrixHeight());
+
               bool *matrix = env->getMatrix();
               memset(matrix, 0, env->getMatrixHeight() * env->getMatrixWidth());
               int radius =env->getMouseRadius() ;
               for (int i = -radius; i < radius; ++i)
                 for (int t = -radius; t < radius; ++t) {
                   int index[2] = { cursor[0] + i, cursor[1] + t };
-                  if ( ( index[0] > 0 ) && ( index[1] > 0 ) && ( index[0] < env->getMatrixWidth() ) && ( index[1] < env->getMatrixHeight() )) {
-                      float d[2] = { cursor[0] - index[0], cursor[1] - index[1] }; 
+                  if ((index[0] > 0) && (index[1] > 0) && (index[0] < env->getMatrixWidth()) && 
+                      (index[1] < env->getMatrixHeight())) {
+
+                      float d[2] = { cursor[0] - index[0], cursor[1] - index[1] };
                       float distance = sqrt(d[0]*d[0] + d[1] * d[1]);
                       if (distance < radius)
                         matrix[index[1]*env->getMatrixWidth() + index[0]] = 1;
@@ -113,7 +116,7 @@ int main(int argc, char *argv[]) {
 
     GLenum err = glewInit();
     if (GLEW_OK != err) {/* Problem: glewInit failed, something is seriously wrong. */
-      std::cout << "Error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
+      std::cout << "error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
       exit(1);
     }
 
@@ -122,6 +125,8 @@ int main(int argc, char *argv[]) {
     int passedMS = msPerFrame;
     unsigned int frameStart = 0;
     int rest = 0;
+
+    std::cout << "done!" << std::endl;
 
     mgr->init();
 

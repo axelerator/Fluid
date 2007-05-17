@@ -34,7 +34,7 @@ public:
     EffectSettings * getConfigFor(std::size_t n);
     bool getMousesimulation() const { return mousesimulation; }
     int getMouseRadius() const { return mouseRadius; }
-	
+
   private:
     Environment();
 

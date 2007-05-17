@@ -15,6 +15,7 @@
 
 #include <GL/gl.h>
 #include "effect.h"
+#include "changedetector.h"
 
 #define IX(i,j) ((i)+(N+2)*(j))
 
@@ -26,6 +27,7 @@ This class simulates a fluid like effect on basis of an algorithm by Jos Stam
 class FluidEffect : public Effect {
   public:
     FluidEffect();
+    FluidEffect(EffectSettings *conf);
     ~FluidEffect();
     virtual void draw();
     virtual void animate(int t);
@@ -49,6 +51,8 @@ class FluidEffect : public Effect {
     void dens_step ( int N, float * x, float * x0, float * u, float * v, float diff, float dt );
     void vel_step ( int N, float * u, float * v, float * u0, float * v0, float visc, float dt );
 
+    ChangeDetector detector;
+
     int N;
     float dt, diff, visc;
     float force, source;
@@ -61,13 +65,19 @@ class FluidEffect : public Effect {
     int omx, omy, mx, my;
 
     std::size_t mw, mh;
-    bool *lastMatrix;
-    bool *activeMatrix;
-    GLfloat *vertexArray;
-    GLfloat *velocityArray;
-    GLfloat *colorArray;
+
     std::size_t count;
-    std::size_t searchRadius;
+
+    int srcXPos;
+    int srcYPos;
+
+    float fgColorR;
+    float fgColorG;
+    float fgColorB;
+
+    float bgColorR;
+    float bgColorG;
+    float bgColorB;
 };
 
 #endif

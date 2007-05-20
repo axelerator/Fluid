@@ -38,3 +38,11 @@ waveeffect.cpp
 
 changeeffect.cpp
 changeeffect.h
+
+
+areadetector.cpp
+areadetector.h
+
+
+lineeffect.cpp
+lineeffect.h

@@ -18,6 +18,7 @@
 #include "changeeffect.h"
 #include "fluideffect.h"
 #include "waveeffect.h"
+#include "lineeffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
@@ -93,6 +94,8 @@ void EffectManager::createEffect(std::size_t n) {
     currentEffect = new FluidEffect();
   else if (nextSetting->getName() == "wave")
     currentEffect = new WaveEffect(nextSetting);
+  else if (nextSetting->getName() == "line")
+    currentEffect = new LineEffect(nextSetting);
   else {
     std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
     exit(1);

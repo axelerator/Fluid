@@ -22,14 +22,6 @@ FluidEffect::FluidEffect(): Effect() {
   force = 10.0f;
   source = 100.0f;
 
-  fgColorR = 1.0;
-  fgColorG = 0.0;
-  fgColorB = 0.0;
-
-  bgColorR = 0.0;
-  bgColorG = 0.5;
-  bgColorB = 0.0;
-
   init();
 
   srcXPos = mw / 2;
@@ -56,7 +48,7 @@ void FluidEffect::init() {
   win_y = mh;
   count = mw * mh;
 
-  glClearColor(bgColorR, bgColorG, bgColorB, 0.0);
+  glClearColor(0.0, 0.0, 0.0, 0.0);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 }
@@ -117,36 +109,23 @@ int FluidEffect::allocate_data ( void ) {
   return ( 1 );
 }
 
-/*static void draw_velocity ( void )
-{
-        int i, j;
-        float x, y, h;
- 
-        h = 1.0f/N;
- 
-        glColor3f ( 1.0f, 1.0f, 1.0f );
-        glLineWidth ( 1.0f );
- 
-        glBegin ( GL_LINES );
- 
-                for ( i=1 ; i<=N ; i++ ) {
-                        x = (i-0.5f)*h;
-                        for ( j=1 ; j<=N ; j++ ) {
-                                y = (j-0.5f)*h;
- 
-                                glVertex2f ( x, y );
-                                glVertex2f ( x+u[IX(i,j)], y+v[IX(i,j)] );
-                        }
-                }
- 
-        glEnd ();
+void FluidEffect::colorize (float x, float y, float z, float rgb[]) {
+float z05 = z *0.5;
+float l = (z05) / hypot(x,y);
+x *= l;
+y *= l;
+
+rgb[0] = z05;
+rgb[1] = z05 + x;
+rgb[2] = z05 + y; 
 }
-*/
+
 
 void FluidEffect::draw_density ( void ) {
   int i, j;
   float x, y, h, d00, d01, d10, d11;
 
+  float c0[3], c1[3], c2[3], c3[3];
   h = 1.0f/N;
 
   glBegin ( GL_QUADS );
@@ -161,18 +140,25 @@ void FluidEffect::draw_density ( void ) {
       d10 = dens[IX(i+1,j)];
       d11 = dens[IX(i+1,j+1)];
 
-      glColor4f(fgColorR, fgColorG, fgColorB, d00);
+      
+      colorize(u[IX(i,j)] , v[IX(i,j)],        d00, c0);
+      colorize(u[IX(i+1,j)], v[IX(i+1,j)] ,    d10, c1);
+      colorize(u[IX(i+1,j+1)], v[IX(i+1,j+1)], d11, c2);
+      colorize(u[IX(i,j+1)] , v[IX(i,j+1)] ,   d01, c3);
+
+      
+      glColor3fv(c0);
       glVertex2f(x * 4.0 - 2.0, y * 2.0 - 1.0);
 
-      glColor4f(fgColorR, fgColorG, fgColorB, d10);
+      glColor3fv(c1);
       glVertex2f((x+h) * 4.0 - 2.0, y  * 2.0 - 1.0);
 
-      glColor4f(fgColorR, fgColorG, fgColorB, d11);
+      glColor3fv(c2);
       glVertex2f((x+h) * 4.0 - 2.0, (y+h)  * 2.0 - 1.0);
 
-      glColor4f(fgColorR, fgColorG, fgColorB, d01);
-      glVertex2f(x * 4.0 - 2.0, (y+h)  * 2.0 - 1.0);
-    }
+      glColor3fv(c3);
+      glVertex2f(x * 4.0 - 2.0, (y+h)  * 2.0 - 1.0);    
+     }
   }
 
   glEnd ();

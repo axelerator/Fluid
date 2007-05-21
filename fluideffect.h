@@ -34,6 +34,7 @@ class FluidEffect : public Effect {
 
   private:
     void init();
+    void colorize (float x, float y, float z, float rgb[]);
 
     void free_data ( void );
     void clear_data ( void );
@@ -71,13 +72,6 @@ class FluidEffect : public Effect {
     int srcXPos;
     int srcYPos;
 
-    float fgColorR;
-    float fgColorG;
-    float fgColorB;
-
-    float bgColorR;
-    float bgColorG;
-    float bgColorB;
 };
 
 #endif

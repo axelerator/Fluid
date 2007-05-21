@@ -30,7 +30,7 @@ public:
     virtual void draw();
 
   private:
-    void init();
+    void init(const char *texture);
 
     float xd,yd;
     GLuint particleTex;

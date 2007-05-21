@@ -21,7 +21,7 @@ SimpleSparkle::SimpleSparkle()
     variance = 0.3;
     maxSpeed = 0.0;
     aging = 0.96;
-    init();
+    init("data/rgba.bmp");
 }
 
 SimpleSparkle::SimpleSparkle(EffectSettings *conf)
@@ -30,17 +30,18 @@ SimpleSparkle::SimpleSparkle(EffectSettings *conf)
     maxSpeed = conf->getFloat("maxspeed");
     aging = conf->getFloat("aging");
     pointSize = conf->getFloat("pointsize");
-    init();
+    init(conf->getString("texture").c_str());
+    std::cout << conf->getString("texture").c_str();
 }
 
 
-void SimpleSparkle::init() {
+void SimpleSparkle::init(const char *texture) {
     int mw = env->getMatrixWidth(), mh = env->getMatrixHeight();
     xd = 4.0 / mw;
     yd = 2.0 / mh;
     count = mw * mh;
 
- RGBAbmp *pic = loadBmp("rgba.bmp");
+ RGBAbmp *pic = loadBmp(texture);
   glGenTextures(1, &particleTex);
   glBindTexture(GL_TEXTURE_2D, particleTex);
   int textureType = GL_RGB;

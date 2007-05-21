@@ -15,7 +15,7 @@
 #include <math.h>
 
 FluidEffect::FluidEffect(): Effect() {
-  N = 128;
+
   dt = 0.1f;
   diff = 0.0f;
   visc = 0.0f;
@@ -39,14 +39,15 @@ FluidEffect::~FluidEffect() {
 }
 
 void FluidEffect::init() {
-  allocate_data();
-  clear_data ();
 
-  mw = env->getMatrixWidth();
+  N = mw = env->getMatrixWidth();
   mh = env->getMatrixHeight();
   win_x = mw;
   win_y = mh;
   count = mw * mh;
+  
+  allocate_data();
+  clear_data ();
 
   glClearColor(0.0, 0.0, 0.0, 0.0);
   glEnable(GL_BLEND);

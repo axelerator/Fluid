@@ -14,6 +14,7 @@
 
 #include <effect.h>
 #include <GL/glew.h>
+#include "changedetector.h"
 
 /**
   @author Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>
@@ -41,6 +42,10 @@ class WaveEffect : public Effect {
     float *input;
     float *output;
     GLuint *indices;
+    
+    float friction;
+    GLuint waterTex;
+    ChangeDetector detector;
 };
 
 #endif

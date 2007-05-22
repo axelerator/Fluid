@@ -42,7 +42,7 @@ class WaveEffect : public Effect {
     float *input;
     float *output;
     GLuint *indices;
-    
+
     float friction;
     GLuint waterTex;
     ChangeDetector detector;

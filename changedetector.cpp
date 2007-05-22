@@ -31,8 +31,14 @@ ChangeDetector::ChangeDetector() {
   activeMatrix = new bool[count];
   velocityArray = new float[2*count];
 
+  for (unsigned int i = 0; i < count; ++i) {
+    lastMatrix[i] = false;
+    activeMatrix[i] = false;
+    velocityArray[i] = 0.0;
+    velocityArray[i * 2] = 0.0;
+  }
+
   memcpy(lastMatrix, env->getMatrix(), count * sizeof(bool));
-  memset(velocityArray, 0, 2 * count * sizeof(float));
 }
 
 /**

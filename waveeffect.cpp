@@ -20,6 +20,11 @@ WaveEffect::WaveEffect(EffectSettings *conf)
   input = new float[4*count];
   output = new float[4*count];
 
+  for (unsigned int i = 0; i < 4 * count; ++i) {
+    input[i] = 0.0;
+    output[i] = 0.0;
+  }
+
   float xd = 4.0 / width;
   float yd = 2.0 / height;
 
@@ -53,15 +58,9 @@ WaveEffect::WaveEffect(EffectSettings *conf)
       unsigned int bottom = ((y-1) * width + x) * 3;
       float a[3] = {vertexArray[right] - vertexArray[left], vertexArray[right+1] - vertexArray[left+1], vertexArray[right+2] - vertexArray[left+2]};
       float b[3] = {vertexArray[top] - vertexArray[bottom], vertexArray[top+1] - vertexArray[bottom+1], vertexArray[top+2] - vertexArray[bottom+2]};
-//       float b[3] = {vertexArray[bottom] - vertexArray[top], vertexArray[bottom+1] - vertexArray[top+1], vertexArray[bottom+2] - vertexArray[top+2]};
       normalArray[idx]   = a[1] *  b[2] - a[2] * b[1];
       normalArray[idx+1] = a[2] *  b[0] - a[0] * b[2];
       normalArray[idx+2] = a[0] *  b[1] - a[1] * b[0];
-/*      float l = sqrt(normalArray[idx]*normalArray[idx]+normalArray[idx+1]*normalArray[idx+1]+normalArray[idx+2]*normalArray[idx+2]);
-      normalArray[idx]   /= l;
-      normalArray[idx+1] /= l;
-      normalArray[idx+2] /= l;*/
-      
     }
   }
 
@@ -72,8 +71,7 @@ WaveEffect::WaveEffect(EffectSettings *conf)
       indices[currIdx++] = (y+1) * width + x;
     }
   }
-  
-  
+
   RGBAbmp *pic = loadBmp(conf->getString("texture").c_str());
   glGenTextures(1, &waterTex);
   glBindTexture(GL_TEXTURE_2D, waterTex);

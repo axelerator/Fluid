@@ -9,6 +9,7 @@
 // Copyright: See COPYING file that comes with this distribution
 //
 //
+#include <GL/glew.h>
 #include "effectmanager.h"
 #include "environment.h"
 #include "effect.h"
@@ -73,11 +74,23 @@ void EffectManager::createEffect(std::size_t n) {
     // Restore all OpenGL settings that could have been changed by the last effect.
     glPopAttrib();
     glPopClientAttrib();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
   }
 
   // Save all OpenGL settings to restore them after changing the effect.
   glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glPushClientAttrib(GL_ALL_ATTRIB_BITS);
+  glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_ACCUM_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+  glMatrixMode(GL_PROJECTION);
+  glPushMatrix();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  // Cleaning the matrix
+  memset(env->getMatrix(), false, env->getMatrixHeight() * env->getMatrixWidth() * sizeof(bool));
 
   EffectSettings *nextSetting = env->getConfigFor(currentEffectId );
   std::cout << "Switching to Effect: " << nextSetting->getName() << std::endl;

@@ -39,19 +39,14 @@ FluidEffect::~FluidEffect() {
 }
 
 void FluidEffect::init() {
-
   N = mw = env->getMatrixWidth();
   mh = env->getMatrixHeight();
   win_x = mw;
   win_y = mh;
   count = mw * mh;
-  
+
   allocate_data();
   clear_data ();
-
-  glClearColor(0.0, 0.0, 0.0, 0.0);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 }
 
 void FluidEffect::draw() {
@@ -111,14 +106,19 @@ int FluidEffect::allocate_data ( void ) {
 }
 
 void FluidEffect::colorize (float x, float y, float z, float rgb[]) {
-float z05 = z *0.5;
-float l = (z05) / hypot(x,y);
-x *= l;
-y *= l;
+  float z05 = z *0.5;
+  float l = (z05) / hypot(x,y);
+  x *= l;
+  y *= l;
 
-rgb[0] = z05;
-rgb[1] = z05 + x;
-rgb[2] = z05 + y; 
+  if (z05 > 0.0) {
+    rgb[0] = z05;
+    rgb[1] = z05 + x;
+    rgb[2] = z05 + y; 
+  }
+  else {
+    rgb[0] = rgb[1] = rgb[2] = 0.0;
+  }
 }
 
 
@@ -141,13 +141,11 @@ void FluidEffect::draw_density ( void ) {
       d10 = dens[IX(i+1,j)];
       d11 = dens[IX(i+1,j+1)];
 
-      
       colorize(u[IX(i,j)] , v[IX(i,j)],        d00, c0);
       colorize(u[IX(i+1,j)], v[IX(i+1,j)] ,    d10, c1);
       colorize(u[IX(i+1,j+1)], v[IX(i+1,j+1)], d11, c2);
       colorize(u[IX(i,j+1)] , v[IX(i,j+1)] ,   d01, c3);
 
-      
       glColor3fv(c0);
       glVertex2f(x * 4.0 - 2.0, y * 2.0 - 1.0);
 

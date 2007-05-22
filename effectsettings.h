@@ -32,6 +32,7 @@ public:
 private:
     std::string name;
     std::map <std::string, std::string> properties ;
+    static std::string undefined; 
 };
 
 std::ostream& operator<<(std::ostream& os, const EffectSettings& s);

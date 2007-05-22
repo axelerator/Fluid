@@ -11,6 +11,8 @@
 //
 #include "effectsettings.h"
 
+std::string EffectSettings::undefined("undefined");
+
 EffectSettings::EffectSettings(std::string name) : name(name) {}
 
 
@@ -32,6 +34,10 @@ void EffectSettings::addProperty(std::string key, std::string value) {
  * @return the value for 'key' and try to converted it to a float
  */
 float EffectSettings::getFloat(std::string key) {
+  if ( properties.count(key) == 0) {
+    std::cerr << "Mandatory parameter " << key << " missing in configuration. Passing 0.0 instead" << std::endl;
+    return 0.0;
+  }
   return atof(properties[key].c_str());
 }
 
@@ -41,6 +47,10 @@ float EffectSettings::getFloat(std::string key) {
  */
 int EffectSettings::getInteger(std::string key)
 {
+  if ( properties.count(key) == 0) {
+    std::cerr << "Mandatory parameter " << key << " missing in configuration. Passing 0 instead" << std::endl;
+    return 0;
+  }
   return atoi(properties[key].c_str());
 }
 
@@ -48,5 +58,9 @@ int EffectSettings::getInteger(std::string key)
  * @return the value for 'key'
  */
 const std::string& EffectSettings::getString(std::string key) {
+    if ( properties.count(key) == 0) {
+    std::cerr << "Mandatory parameter " << key << " missing in configuration. Passing 0.0 instead" << std::endl;
+    return undefined ;
+  }
   return properties[key];
 }

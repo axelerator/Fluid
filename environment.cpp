@@ -13,7 +13,10 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include "vrf/include/OptionSender.h"
+
+#ifndef NOVRF
+  #include "vrf/include/OptionSender.h"
+#endif
 
 Environment* Environment::instance = 0;
 
@@ -81,7 +84,6 @@ bool Environment::loadConfig(std::string filename) {
               std::string value = currLine.substr(currLine.find_first_of('=')+1, currLine.size()-1);
               while ((value.at(0) == ' ') || (value.at(0) == '\t'))
                 value = value.substr(1,value.size()-1);
-              //std::cout << "prpoerty:" << propName << ":" << value << ":" << std::endl;
               currentSetting->addProperty( propName, value );
             }
           }
@@ -94,13 +96,18 @@ bool Environment::loadConfig(std::string filename) {
   matrixSize[0] = globalconfig.getInteger("matrixwidth");
   matrixSize[1] = globalconfig.getInteger("matrixheight");
   matrix = (bool*)malloc(sizeof(bool)*matrixSize[0]*matrixSize[1]);
-  mousesimulation = globalconfig.getString("mousesimulation").compare("off") != 0;
-  if (mousesimulation)
-    mouseRadius = globalconfig.getInteger("mouseradius");
-  if (!mousesimulation) {
-    OptionSender* sender = new OptionSender();
-    sender->SetNewOption(BOOLMATRIX, matrixSize[0], matrixSize[1], matrix);
-  }
+  #ifndef NOVRF
+    mousesimulation = globalconfig.getString("mousesimulation").compare("off") != 0;
+    if (mousesimulation)
+      mouseRadius = globalconfig.getInteger("mouseradius");
+    if (!mousesimulation) {
+      OptionSender* sender = new OptionSender();
+      sender->SetNewOption(BOOLMATRIX, matrixSize[0], matrixSize[1], matrix);
+    }
+  #else
+    mousesimulation = true;
+    std::cout << "Binary compiled for mouse only mode.." << std::endl;
+  #endif
   return true; 
 }
 

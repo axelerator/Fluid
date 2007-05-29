@@ -15,6 +15,9 @@
 #include <string>
 #include <vector>
 #include "effectsettings.h"
+
+class OptionSender;
+
 /**
 	@author Axel Tetzlaff & Timo B. Hübel <axel.tetzlaff@gmx.de / t.h@gmx.com>
 */
@@ -25,8 +28,8 @@ public:
     int getScreenWidth() const { return screenWidth; }
     int getScreenHeight() const { return screenHeight; }
     int getFps() const { return fps; }
-    int getMatrixWidth() const { return matrixSize[0]; }
-    int getMatrixHeight() const { return matrixSize[1]; }
+    int getMatrixWidth() const { return matrixWidth; }
+    int getMatrixHeight() const { return matrixHeight; }
     bool loadConfig(std::string filename);
     bool *getMatrix() const { return matrix; }
     static Environment* getInstance();
@@ -34,6 +37,7 @@ public:
     EffectSettings * getConfigFor(std::size_t n);
     bool getMousesimulation() const { return mousesimulation; }
     int getMouseRadius() const { return mouseRadius; }
+    void updateMatrixDimensions(EffectSettings *conf);
 
   private:
     Environment();
@@ -41,18 +45,21 @@ public:
     int screenWidth;
     int screenHeight;
     int fps;
-    /**
-     * defines wther input is take from the mouse ot the table
-     */
-    bool mousesimulation;
+    bool mousesimulation;  ///< Defines whether input is take from the mouse ot the table.
 
     // The one and only instance of the environemnt!
     static Environment *instance;
-    int matrixSize[2];
+    int matrixWidth;
+    int matrixHeight;
     bool *matrix;
     std::vector<EffectSettings> configurations;
     EffectSettings globalconfig;
     int mouseRadius;
+
+    #ifndef NOVRF
+      OptionSender *sender;
+    #endif
+
 };
 
 #endif

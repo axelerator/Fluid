@@ -20,7 +20,7 @@
 #include "fluideffect.h"
 #include "waveeffect.h"
 #include "lineeffect.h"
-#include "catchsparkseffect.h"
+//#include "catchsparkseffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
@@ -94,6 +94,9 @@ void EffectManager::createEffect(std::size_t n) {
   memset(env->getMatrix(), false, env->getMatrixHeight() * env->getMatrixWidth() * sizeof(bool));
 
   EffectSettings *nextSetting = env->getConfigFor(currentEffectId );
+
+  env->updateMatrixDimensions(nextSetting);
+
   std::cout << "Switching to Effect: " << nextSetting->getName() << std::endl;
 
   if (nextSetting->getName() == "simplesparkle")
@@ -105,13 +108,13 @@ void EffectManager::createEffect(std::size_t n) {
   else if (nextSetting->getName() == "changedetector")
     currentEffect = new ChangeEffect();
   else if (nextSetting->getName() == "fluid")
-    currentEffect = new FluidEffect();
+    currentEffect = new FluidEffect(nextSetting);
   else if (nextSetting->getName() == "wave")
     currentEffect = new WaveEffect(nextSetting);
   else if (nextSetting->getName() == "line")
     currentEffect = new LineEffect(nextSetting);
-  else if (nextSetting->getName() == "flower")
-    currentEffect = new CatchSparksEffect(nextSetting);
+/*  else if (nextSetting->getName() == "flower")
+    currentEffect = new CatchSparksEffect(nextSetting);*/
   else {
     std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
     exit(1);

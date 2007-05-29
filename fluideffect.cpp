@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-FluidEffect::FluidEffect(): Effect() {
+FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
 
   dt = 0.1f;
   diff = 0.0f;
@@ -28,12 +28,6 @@ FluidEffect::FluidEffect(): Effect() {
   srcYPos = mh / 2;
 }
 
-FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
-  N = env->getMatrixWidth();
-
-  init();
-}
-
 FluidEffect::~FluidEffect() {
   free_data();
 }
@@ -41,6 +35,7 @@ FluidEffect::~FluidEffect() {
 void FluidEffect::init() {
   N = mw = env->getMatrixWidth();
   mh = env->getMatrixHeight();
+  std::cout << "N: " << N << std::endl;
   win_x = mw;
   win_y = mh;
   count = mw * mh;

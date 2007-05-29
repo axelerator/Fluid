@@ -26,7 +26,7 @@ Environment::Environment()
 }
 
 Environment::~Environment() {
-  free(matrix);
+  delete [] matrix;
 }
 
 Environment* Environment::getInstance() {
@@ -48,7 +48,7 @@ bool Environment::loadConfig(std::string filename) {
     }
     while (getline(infile, line, '\n'))
           file.push_back (line);
-    
+
     std::vector<std::string>::const_iterator cii;
     EffectSettings *currentSetting = 0;
     for( cii = file.begin(); cii != file.end(); cii++) {
@@ -66,7 +66,6 @@ bool Environment::loadConfig(std::string filename) {
           } else {
             configurations.push_back(EffectSettings(effectName));
             currentSetting = &(configurations.back());
-          
           }
         } else {
           if (currentSetting == 0 )
@@ -93,16 +92,16 @@ bool Environment::loadConfig(std::string filename) {
   screenWidth = globalconfig.getInteger("screenwidth");
   screenHeight = globalconfig.getInteger("screenheight");
   fps = globalconfig.getInteger("fps");
-  matrixSize[0] = globalconfig.getInteger("matrixwidth");
-  matrixSize[1] = globalconfig.getInteger("matrixheight");
-  matrix = (bool*)malloc(sizeof(bool)*matrixSize[0]*matrixSize[1]);
+  matrixWidth = globalconfig.getInteger("matrixwidth");
+  matrixHeight = globalconfig.getInteger("matrixheight");
+  matrix = new bool[matrixWidth * matrixHeight];
   #ifndef NOVRF
     mousesimulation = globalconfig.getString("mousesimulation").compare("off") != 0;
     if (mousesimulation)
       mouseRadius = globalconfig.getInteger("mouseradius");
     if (!mousesimulation) {
-      OptionSender* sender = new OptionSender();
-      sender->SetNewOption(BOOLMATRIX, matrixSize[0], matrixSize[1], matrix);
+      sender = new OptionSender();
+      sender->SetNewOption(BOOLMATRIX,  matrixHeight, matrixWidth, matrix);
     }
   #else
     mousesimulation = true;
@@ -111,6 +110,38 @@ bool Environment::loadConfig(std::string filename) {
   return true; 
 }
 
+
+/**
+ * Update the matrix dimension if appropriate configuration values
+ * are present in the effect configuration of the argument.
+ * 
+ * @param conf Effect configuration.
+ */
+void Environment::updateMatrixDimensions(EffectSettings *conf) {
+  int newMatrixWidth = conf->getInteger("matrixwidth");
+  int newMatrixHeight = conf->getInteger("matrixheight");
+
+  // Both values need to be set.
+  if ((newMatrixWidth == 0) || (newMatrixHeight == 0)) {
+    newMatrixWidth = globalconfig.getInteger("matrixwidth");
+    newMatrixHeight = globalconfig.getInteger("matrixheight");
+  }
+
+  // Avoid unnecessary changes.
+  if ((newMatrixWidth != matrixWidth) || (newMatrixHeight != matrixHeight)) {
+    matrixWidth = newMatrixWidth;
+    matrixHeight = newMatrixHeight;
+    bool *newMatrix = new bool[matrixWidth * matrixHeight];
+    bool *oldMatrix = matrix;
+
+    #ifndef NOVRF
+      sender->SetNewOption(BOOLMATRIX, matrixHeight, matrixWidth, newMatrix);
+    #endif
+
+    matrix = newMatrix;
+    delete [] oldMatrix;
+  }
+}
 
 /**
  * @return the amount of configurations, which determines the amount of different Effects

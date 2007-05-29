@@ -16,7 +16,7 @@
   </general>
   <kdevcustomproject>
     <run>
-      <mainprogram>./fluid</mainprogram>
+      <mainprogram>/mnt/stuff/fhw/gma2/fluid/trunk/./fluid</mainprogram>
       <directoryradio>executable</directoryradio>
       <programargs/>
       <globaldebugarguments/>
@@ -51,6 +51,23 @@
     <general>
       <activedir/>
     </general>
+    <filetypes>
+      <filetype>*.java</filetype>
+      <filetype>*.h</filetype>
+      <filetype>*.H</filetype>
+      <filetype>*.hh</filetype>
+      <filetype>*.hxx</filetype>
+      <filetype>*.hpp</filetype>
+      <filetype>*.c</filetype>
+      <filetype>*.C</filetype>
+      <filetype>*.cc</filetype>
+      <filetype>*.cpp</filetype>
+      <filetype>*.c++</filetype>
+      <filetype>*.cxx</filetype>
+      <filetype>Makefile</filetype>
+      <filetype>CMakeLists.txt</filetype>
+    </filetypes>
+    <blacklist/>
   </kdevcustomproject>
   <kdevdebugger>
     <general>
@@ -162,6 +179,8 @@
       <includeTypes>true</includeTypes>
       <includeEnums>true</includeEnums>
       <includeTypedefs>false</includeTypedefs>
+      <parseMissingHeadersExperimental>false</parseMissingHeadersExperimental>
+      <resolveIncludePathsUsingMakeExperimental>false</resolveIncludePathsUsingMakeExperimental>
     </codecompletion>
     <creategettersetter>
       <prefixGet/>

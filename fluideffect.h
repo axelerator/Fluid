@@ -26,7 +26,6 @@ This class simulates a fluid like effect on basis of an algorithm by Jos Stam
 */
 class FluidEffect : public Effect {
   public:
-    FluidEffect();
     FluidEffect(EffectSettings *conf);
     ~FluidEffect();
     virtual void draw();

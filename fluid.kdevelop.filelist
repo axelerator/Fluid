@@ -46,3 +46,11 @@ areadetector.h
 
 lineeffect.cpp
 lineeffect.h
+
+
+catchsparkseffect.cpp
+catchsparkseffect.h
+
+
+flower.cpp
+flower.h

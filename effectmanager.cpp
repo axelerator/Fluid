@@ -20,6 +20,7 @@
 #include "fluideffect.h"
 #include "waveeffect.h"
 #include "lineeffect.h"
+#include "catchsparkseffect.h"
 
 EffectManager* EffectManager::instance = 0;
 
@@ -109,6 +110,8 @@ void EffectManager::createEffect(std::size_t n) {
     currentEffect = new WaveEffect(nextSetting);
   else if (nextSetting->getName() == "line")
     currentEffect = new LineEffect(nextSetting);
+  else if (nextSetting->getName() == "flower")
+    currentEffect = new CatchSparksEffect(nextSetting);
   else {
     std::cerr << "Effect '" << nextSetting->getName() << "' not found -> exiting.";
     exit(1);

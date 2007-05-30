@@ -103,20 +103,20 @@ void userInput() {
 
 
 int main(int argc, char *argv[]) {
-    std::cout << "Initializing Effect Master 3000...";
+    std::cout << "Initializing Effect Master 3000..." << std::endl;
     EffectManager *mgr = EffectManager::getInstance();
     Environment *env = mgr->getEnvironment();
     env->loadConfig("effectmaster.conf");
 
     if (!createWindow("Effect Master 3000", env->getScreenWidth(), env->getScreenHeight()) ||
             !initOpenGL(env->getScreenWidth(), env->getScreenHeight())) {
-        std::cout << "error!" << std::endl;
+        std::cout << "Error creating window!" << std::endl;
         exit(1);
     }
 
     GLenum err = glewInit();
     if (GLEW_OK != err) {/* Problem: glewInit failed, something is seriously wrong. */
-      std::cout << "error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
+      std::cout << "Error initializing GLEW: " << glewGetErrorString(err)  << std::endl;
       exit(1);
     }
 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[]) {
     unsigned int frameStart = 0;
     int rest = 0;
 
-    std::cout << "done!" << std::endl;
+    std::cout << "Initialization done!" << std::endl;
 
     mgr->init();
 

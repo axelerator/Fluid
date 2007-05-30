@@ -23,12 +23,19 @@ Encapsulates the configuration for an effect and provides conveniece access meth
 class EffectSettings {
 public:
     EffectSettings(std::string name);
-    const std::string getName() const { return name;}
     ~EffectSettings();
+
+    const std::string getName() const { return name;}
     void addProperty(std::string key, std::string value);
+
     float getFloat(std::string key);
     int getInteger(std::string key);
     const std::string& getString(std::string key);
+
+    float getFloatOrDefault(std::string key, float defaultValue);
+    int getIntegerOrDefault(std::string key, int defaultValue);
+    const std::string& getStringOrDefault(std::string key, std::string defaultValue);
+
 private:
     std::string name;
     std::map <std::string, std::string> properties ;

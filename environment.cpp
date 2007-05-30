@@ -100,12 +100,13 @@ bool Environment::loadConfig(std::string filename) {
     if (mousesimulation)
       mouseRadius = globalconfig.getInteger("mouseradius");
     if (!mousesimulation) {
+      std::cout << "Requesting matrix: " << matrixWidth << " x " << matrixHeight << std::endl;
       sender = new OptionSender();
       sender->SetNewOption(BOOLMATRIX,  matrixHeight, matrixWidth, matrix);
     }
   #else
     mousesimulation = true;
-    std::cout << "Binary compiled for mouse only mode.." << std::endl;
+    std::cout << "Binary compiled for mouse only mode" << std::endl;
   #endif
   return true; 
 }
@@ -113,19 +114,13 @@ bool Environment::loadConfig(std::string filename) {
 
 /**
  * Update the matrix dimension if appropriate configuration values
- * are present in the effect configuration of the argument.
+ * are present in the current effect configuration.
  * 
  * @param conf Effect configuration.
  */
 void Environment::updateMatrixDimensions(EffectSettings *conf) {
-  int newMatrixWidth = conf->getInteger("matrixwidth");
-  int newMatrixHeight = conf->getInteger("matrixheight");
-
-  // Both values need to be set.
-  if ((newMatrixWidth == 0) || (newMatrixHeight == 0)) {
-    newMatrixWidth = globalconfig.getInteger("matrixwidth");
-    newMatrixHeight = globalconfig.getInteger("matrixheight");
-  }
+  int newMatrixWidth = conf->getIntegerOrDefault("matrixwidth", globalconfig.getInteger("matrixwidth"));
+  int newMatrixHeight = conf->getIntegerOrDefault("matrixheight", globalconfig.getInteger("matrixheight"));
 
   // Avoid unnecessary changes.
   if ((newMatrixWidth != matrixWidth) || (newMatrixHeight != matrixHeight)) {
@@ -135,7 +130,10 @@ void Environment::updateMatrixDimensions(EffectSettings *conf) {
     bool *oldMatrix = matrix;
 
     #ifndef NOVRF
-      sender->SetNewOption(BOOLMATRIX, matrixHeight, matrixWidth, newMatrix);
+      if (!mousesimulation) {
+        std::cout << "Requesting new matrix: " << matrixWidth << " x " << matrixHeight << std::endl;
+        sender->SetNewOption(BOOLMATRIX, matrixHeight, matrixWidth, newMatrix);
+      }
     #endif
 
     matrix = newMatrix;

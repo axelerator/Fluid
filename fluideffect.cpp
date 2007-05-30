@@ -24,21 +24,15 @@ FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
 
   init();
 
-  srcXPos = conf->getInteger("srcx");
-  srcYPos = conf->getInteger("srcy");
+  srcXPos = conf->getIntegerOrDefault("srcx", mw / 2);
+  srcYPos = conf->getIntegerOrDefault("srcy", mh / 2);
 
   if (srcXPos > int(mw)) {
     srcXPos = mw;
   }
-  if (srcXPos == 0) {
-    srcXPos = mw / 2;
-  }
 
   if (srcYPos > int(mh)) {
     srcYPos = mh;
-  }
-  if (srcYPos == 0) {
-    srcYPos = mh / 2;
   }
 }
 

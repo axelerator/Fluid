@@ -64,3 +64,49 @@ const std::string& EffectSettings::getString(std::string key) {
   }
   return properties[key];
 }
+
+/**
+ * Returns the value for given key or the default argument.
+ * 
+ * @param key The key for the value.
+ * @param defaultValue The default value if the key is not present.
+ * 
+ * @return The value for as float.
+ */
+float EffectSettings::getFloatOrDefault(std::string key, float defaultValue) {
+  if ( properties.count(key) == 0) {
+    return defaultValue;
+  }
+  return atof(properties[key].c_str());
+}
+
+
+/**
+ * Returns the value for given key or the default argument.
+ * 
+ * @param key The key for the value.
+ * @param default The default value if the key is not present.
+ * 
+ * @return The value for as integer.
+ */
+int EffectSettings::getIntegerOrDefault(std::string key, int defaultValue) {
+  if ( properties.count(key) == 0) {
+    return defaultValue;
+  }
+  return atoi(properties[key].c_str());
+}
+
+/**
+ * Returns the value for given key or the default argument.
+ * 
+ * @param key The key for the value.
+ * @param defaultValue The default value if the key is not present.
+ * 
+ * @return The value for as string.
+ */
+const std::string& EffectSettings::getStringOrDefault(std::string key, std::string defaultValue) {
+    if ( properties.count(key) == 0) {
+    return defaultValue;
+  }
+  return properties[key];
+}

@@ -24,8 +24,22 @@ FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
 
   init();
 
-  srcXPos = mw / 2;
-  srcYPos = mh / 2;
+  srcXPos = conf->getInteger("srcx");
+  srcYPos = conf->getInteger("srcy");
+
+  if (srcXPos > int(mw)) {
+    srcXPos = mw;
+  }
+  if (srcXPos == 0) {
+    srcXPos = mw / 2;
+  }
+
+  if (srcYPos > int(mh)) {
+    srcYPos = mh;
+  }
+  if (srcYPos == 0) {
+    srcYPos = mh / 2;
+  }
 }
 
 FluidEffect::~FluidEffect() {
@@ -35,7 +49,7 @@ FluidEffect::~FluidEffect() {
 void FluidEffect::init() {
   N = mw = env->getMatrixWidth();
   mh = env->getMatrixHeight();
-  std::cout << "N: " << N << std::endl;
+
   win_x = mw;
   win_y = mh;
   count = mw * mh;
@@ -179,29 +193,6 @@ void FluidEffect::get_from_UI(float *d, float *u, float *v) {
 
   // constantly add some density
   d[IX(srcXPos, srcYPos)] = source;
-
-//     if ( !mouse_down[0] && !mouse_down[2] )
-//         return;
-// 
-//     i = (int)((       mx /(float)win_x)*N+1);
-//     j = (int)(((win_y-my)/(float)win_y)*N+1);
-// 
-//     if ( i<1 || i>N || j<1 || j>N )
-//         return;
-// 
-//     if ( mouse_down[0] ) {
-//         u[IX(i,j)] = force * (mx-omx);
-//         v[IX(i,j)] = force * (omy-my);
-//     }
-// 
-//     if ( mouse_down[2] ) {
-//         d[IX(i,j)] = source;
-//     }
-// 
-//     omx = mx;
-//     omy = my;
-// 
-//     return;
 }
 
 /* --------------------  SOLVER methods -------------------- */

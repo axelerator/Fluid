@@ -15,13 +15,15 @@
 #include <GL/glew.h>
 #include <GL/glu.h>
 #include <SDL/SDL.h>
+#include <math.h>
+#include <time.h>
+#include <signal.h>
 
 #include "effectmanager.h"
 #include "environment.h"
-#include <math.h>
-#include <time.h>
-int done = 0; // if true program will terminate
-int cursor[2]; // stores position of the mousecursor in matrix coordinates
+
+bool done = 0; // If true, program will terminate
+int cursor[2]; // Stores position of the mousecursor in matrix coordinates
 
 bool initOpenGL(int w, int h) {
     glViewport(0, 0, (GLsizei) w, (GLsizei) h);
@@ -87,23 +89,50 @@ void userInput() {
             break;
         case SDL_KEYDOWN:
           switch (event.key.keysym.sym) {
-            case SDLK_RIGHT: EffectManager::getInstance()->nextEffect(); break;
-            case SDLK_LEFT: EffectManager::getInstance()->previousEffect(); break;
+            case SDLK_RIGHT: 
+              EffectManager::getInstance()->nextEffect(); 
+              break;
+
+            case SDLK_LEFT:
+              EffectManager::getInstance()->previousEffect();
+              break;
+
             case SDLK_q: 
-            case SDLK_ESCAPE: 
-                              done = 1; break;
-            default:;
+            case SDLK_ESCAPE:
+              done = true; 
+              break;
+
+            default:
+              ;
           }
           break;
         case SDL_QUIT:
-            done = 1;
+            done = true;
         }
     }
 }
 
+void SignalHandler(int sig) {
+  signal(sig, SIG_IGN);
+
+  switch (sig) {
+    case SIGINT: 
+      std::cout << "SIGINT catched, exiting..." << std::endl;
+      break;
+
+    default: 
+      std::cout << "Unknown signal catched, exiting..." << std::endl;
+      break;
+  }
+
+  done = true;
+}
 
 int main(int argc, char *argv[]) {
     std::cout << "Initializing Effect Master 3000..." << std::endl;
+
+    signal(SIGINT, SignalHandler);
+
     EffectManager *mgr = EffectManager::getInstance();
     Environment *env = mgr->getEnvironment();
     env->loadConfig("effectmaster.conf");

@@ -44,6 +44,9 @@ class CatchSparksEffect : public Effect
     
     GLfloat *vertices;
     GLfloat *colors;
+    
+    GLfloat blossomsize;
+    GLfloat sparksize;
 };
 
 #endif

@@ -104,7 +104,7 @@ int EffectSettings::getIntegerOrDefault(std::string key, int defaultValue) {
  * 
  * @return The value for as string.
  */
-const std::string& EffectSettings::getStringOrDefault(std::string key, std::string defaultValue) {
+std::string EffectSettings::getStringOrDefault(std::string key, std::string defaultValue) {
     if ( properties.count(key) == 0) {
     return defaultValue;
   }

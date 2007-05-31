@@ -34,7 +34,7 @@ public:
 
     float getFloatOrDefault(std::string key, float defaultValue);
     int getIntegerOrDefault(std::string key, int defaultValue);
-    const std::string& getStringOrDefault(std::string key, std::string defaultValue);
+    std::string getStringOrDefault(std::string key, std::string defaultValue);
 
 private:
     std::string name;

@@ -52,12 +52,12 @@ bool Environment::loadConfig(std::string filename) {
     std::vector<std::string>::const_iterator cii;
     EffectSettings *currentSetting = 0;
     for( cii = file.begin(); cii != file.end(); cii++) {
-      if ((*cii).length() > 0) {
-        std::string currLine = *cii; 
-        while ((currLine.at(0) == ' ') || (currLine.at(0) == '\t'))
+      std::string currLine = *cii; 
+      while ((currLine.length() > 0) && ((currLine.at(0) == ' ') || (currLine.at(0) == '\t')))
           currLine = currLine.substr(1,currLine.size()-1);
+      if (currLine.length() > 0) {
         if (currLine.at(0) == 35) {
-          ; // skip comment line
+          ; // skip empty or comment line
         } else if (currLine.at(0) == 91) {
           std::size_t closing = currLine.find_first_of(']', 0);
           std::string effectName = currLine.substr(1, closing-1);

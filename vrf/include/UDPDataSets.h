@@ -35,7 +35,7 @@
 #define VRF_IP "127.0.0.1"
 #define UDP_PORT 19000
 
-typedef enum {BOOLMATRIX, CENTROIDMATRIX} DATASET;
+typedef enum {DEFAULT, BOOLMATRIX, CENTROIDMATRIX} DATASET;
 typedef char* IP;
 typedef unsigned int Port;
 typedef void* Data;

@@ -3,9 +3,7 @@
 
 #include <vector>
 #include "UDPDataSets.h"
-//#include "UDPReceiver.h"
-
-class UDPReceiver;
+#include "UDPReceiver.h"
 
 class OptionSender
 {
@@ -17,7 +15,7 @@ public:
 	void SetNewOption(DATASET dataset, int w, int h, void* targetData);
 
 private:
-	unsigned int deleteFromVector(DATASET dataset);
+	unsigned int searchVectorFor(DATASET dataset);
 
 // Attribute
 private:

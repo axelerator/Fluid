@@ -58,9 +58,10 @@ public:
     EffectSettings globalconfig;
     int mouseRadius;
 
-    #ifndef NOVRF
     bool fullscreen;
-      OptionSender *sender;
+
+    #ifndef NOVRF
+    OptionSender *sender;
     #endif
 
 };

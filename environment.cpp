@@ -20,17 +20,25 @@
 
 Environment* Environment::instance = 0;
 
-Environment::Environment() 
-: mousesimulation(true), globalconfig(std::string("environment")), mouseRadius(10), sender(0) {
+Environment::Environment() : mousesimulation(true), 
+                             globalconfig(std::string("environment")), 
+                             mouseRadius(10) 
+#ifndef NOVRF
+                             , sender(0) 
+#endif
+{
 
 }
 
 Environment::~Environment() {
   delete [] matrix;
+
+#ifndef NOVRF
   if (sender) {
     delete sender;
     std::cout << "Tracker connection successfully closed!" << std::endl;
   }
+#endif
 }
 
 /**

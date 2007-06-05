@@ -27,7 +27,7 @@ Flower::Flower() {
 
 void Flower::reset() {
   fetched = 0;
-
+  phase = 0;
   age = (int)-(((float)rand()/RAND_MAX)*1000);
   position[0] = ((((float)rand()/RAND_MAX)*4.0)-2.0);
   position[1] = ((((float)rand()/RAND_MAX)*2.0)-1.0);
@@ -43,15 +43,16 @@ void Flower::reset() {
     angle =  (((float)rand()/RAND_MAX)*p);
     blossom[2*i]   = position[0] + sin(i*p + angle) * 0.02;
     blossom[2*i+1] = position[1] + cos(i*p + angle) * 0.02;
-    blossomColor[4*i] = 0.8;
-    blossomColor[4*i+1] = color[0];
-    blossomColor[4*i+2] = color[1];
-    blossomColor[4*i+3] = color[2];
+    blossomColor[4*i]   = color[0];
+    blossomColor[4*i+1] = color[1];
+    blossomColor[4*i+2] = color[2];
+    blossomColor[4*i+3] = 0.0;
   }
   
   for (unsigned int i = 0; i < sparkCount; ++i) 
     resetSpark(i);
-  
+  for (unsigned int i = 0; i < sparkCount; ++i) 
+    sparksColors[4*i+3] = 0.0 ;
 }
 
 void Flower::resetSpark(unsigned int i) {
@@ -59,13 +60,13 @@ void Flower::resetSpark(unsigned int i) {
     sparksColors[4*i] = 0.8 + (((float)rand()/RAND_MAX)*0.2);
     sparksColors[4*i+1] = 0.6 + (((float)rand()/RAND_MAX)*0.2);
     sparksColors[4*i+2] = 0.6;
-    sparksColors[4*i+3] = 0.4 ;
+    sparksColors[4*i+3] = 1.0;
     
     //sparksColors[4*i] = sparksColors[4*i+1] = sparksColors[4*i+2] = 0.6;
     
     float angle =  (((float)rand()/RAND_MAX)*2.0*M_PI);
     float speed =  (((float)rand()/RAND_MAX)*0.003);
-    sparksAge[i] = (unsigned int)(((float)rand()/RAND_MAX)*30);
+    sparksAge[i] = (unsigned int)(((float)rand()/RAND_MAX)*80);
     sparksVel[2*i]   = sin(angle);
     sparksVel[2*i+1] = cos(angle);
     
@@ -78,46 +79,84 @@ void Flower::resetSpark(unsigned int i) {
 }
 
 Flower::~Flower()
-{}
+{
+  delete[] sparksVel;
+  delete[] sparksAge;
+}
 
 
 void Flower::animate() {
 ++age;
-
-  if (fetched > 0) {
-    const AreaObject *o = 0;
-    const AreaObjects &objects = detector->getObjects();
-    std::size_t oi = 0;
-    while ( o == 0 && oi < objects.size()) {
-      if (objects[oi].id == fetched)
-        o = &(objects[oi]);
-      else
-        ++oi;
-    }
-    if (o == 0)
-      this->reset();
-    else {
-      float dif[] = {o->x * xd - 2.0, o->y * yd - 1.0};
-      position[0] = blossom[0]  += (dif[0] - blossom[0]) * (0.05 );
-      position[1] = blossom[1]  += (dif[1] - blossom[1]) * (0.05 );
-      for ( unsigned int t = 1; t < blossomCount; ++t) {
-        blossom[2 * t]      += (blossom[2 * (t-1)] - blossom[2 * t]) * 0.5;
-        blossom[2 * t + 1]  += (blossom[2 * t-1] - blossom[2 * t + 1]) * 0.5;
-      }
-    }
+switch (phase) {
+  case 0: {
+          for (unsigned int i = 0; i < blossomCount; ++i) {
+            blossomColor[4*i+3] = fmax(age,0.0) * 0.02;
+            if (age > 50)
+              phase = 1;
+          }
+          break;}
+  case 1:{
+          for (unsigned int i = 0; i < sparkCount; ++i) 
+            if ( sparksAge[i] > 80) { 
+              resetSpark(i);
+            } else {
+              sparks[2*i] += sparksVel[2*i];
+              sparks[2*i+1] += sparksVel[2*i+1];
+              sparksColors[4*i+3] *= 0.999;
+              ++sparksAge[i];
+            }
+          break;}
+  case 2: {
+          const AreaObject *o = 0;
+          const AreaObjects &objects = detector->getObjects();
+          std::size_t oi = 0;
+          while ( o == 0 && oi < objects.size())
+            if (objects[oi].id == fetched)
+              o = &(objects[oi]);
+            else
+              ++oi;
+          if (o == 0) {
+            for (unsigned int i = 0; i < sparkCount; ++i) {
+              //resetSpark(i);
+              sparksVel[2*i] *= 10.0;
+              sparksVel[2*i+1] *= 10.0;
+            }
+            age = 0;
+            phase = 3;
+          } else {
+            float dif[] = {o->x * xd - 2.0, o->y * yd - 1.0};
+            position[0] = blossom[0]  += (dif[0] - blossom[0]) * (0.05 );
+            position[1] = blossom[1]  += (dif[1] - blossom[1]) * (0.05 );
+            for ( unsigned int t = 1; t < blossomCount; ++t) {
+              blossom[2 * t]      += (blossom[2 * (t-1)] - blossom[2 * t]) * 0.5;
+              blossom[2 * t + 1]  += (blossom[2 * t-1] - blossom[2 * t + 1]) * 0.5;
+            }
+            for (unsigned int i = 0; i < sparkCount; ++i) 
+              if ( sparksAge[i] > 80) { 
+                resetSpark(i);
+              } else {
+                sparks[2*i] += sparksVel[2*i];
+                sparks[2*i+1] += sparksVel[2*i+1];
+                sparksColors[4*i+3] *= 0.999;
+                ++sparksAge[i];
+              }
+          }
+          break;}
+  case 3: {
+          for ( unsigned int i = 0; i < blossomCount; ++i) {
+              blossomColor[4*i+3] *= 0.9;
+          }
+          for (unsigned int i = 0; i < sparkCount; ++i) {
+              sparks[2*i] += sparksVel[2*i];
+              sparks[2*i+1] += sparksVel[2*i+1];
+              sparksColors[4*i+3] *= 0.97;
+              ++sparksAge[i];
+          }
+          if (age > 200)
+            this->reset();
+        break;}
   }
-
-
-  for (unsigned int i = 0; i < sparkCount; ++i) 
-    if ( sparksAge[i] > 80) { 
-      resetSpark(i);
-    } else {
-      sparks[2*i] += sparksVel[2*i];
-      sparks[2*i+1] += sparksVel[2*i+1];
-
-      sparksColors[4*i+3] *= 0.999;
-      ++sparksAge[i];
-    }
+  
 }
 
 void Flower::setBlossomPointers(GLfloat *v, GLfloat *c) {

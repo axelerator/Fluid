@@ -35,8 +35,8 @@ class Flower
     static void setAreaDetector ( AreaDetector *detector) { Flower::detector = detector; }
     static void setxyd(float x, float y) { xd =x; yd = y; }
 
-    void setFetched ( unsigned int theValue ) { fetched = theValue; }
-    unsigned int getFetched() const	{ return fetched; }
+    void setFetched ( unsigned int theValue ) { if (phase == 1) {fetched = theValue; phase = 2;}}
+    bool isFetched() const	{ return (phase == 2); }
     void resetSpark(unsigned int i);
   
     GLfloat position[2];
@@ -49,14 +49,14 @@ class Flower
   static float yd;
   
   GLfloat *blossom;
+
   GLfloat *blossomColor;
   GLfloat *sparks;
   GLfloat *sparksColors;
   unsigned int *sparksAge;
   GLfloat *sparksVel;
   int age;
-  
-  
+  unsigned char phase ;
   
   unsigned int fetched;
 };

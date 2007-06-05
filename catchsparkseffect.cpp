@@ -119,11 +119,11 @@ CatchSparksEffect::~CatchSparksEffect()
 void CatchSparksEffect::animate ( int t )
 {
   detector.update();
-  const AreaObjects &objects = detector.getObjects();
+ const AreaObjects &objects = detector.getObjects();
 
   for (unsigned i = 0; i < flowerCount; ++i) {
-    if ( flowers[i].getFetched() == 0) {
-      for(unsigned int obj = 0; (obj < objects.size()) && (flowers[i].getFetched() == 0); ++obj) {
+    if ( !flowers[i].isFetched()) {
+      for(unsigned int obj = 0; (obj < objects.size()) && (!flowers[i].isFetched()); ++obj) {
         float  dif[] = {flowers[i].position[0] - (objects[obj].x * xd - 2.0), flowers[i].position[1] - (objects[obj].y * yd -1.0 )};
         if (hypot(dif[0], dif[1]) < (objects[obj].width*xd))
           flowers[i].setFetched(objects[obj].id);
@@ -131,6 +131,8 @@ void CatchSparksEffect::animate ( int t )
     }
     flowers[i].animate();
   }
+   
+ 
 }
 
 void CatchSparksEffect::draw()

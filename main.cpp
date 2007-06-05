@@ -36,7 +36,7 @@ bool initOpenGL(int w, int h) {
     return (glGetError() == GL_NO_ERROR);
 }
 
-int createWindow(std::string title, int width, int height) {
+int createWindow(std::string title, int width, int height, bool fullscreen) {
 
     if(SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("error: %s", SDL_GetError());
@@ -45,10 +45,11 @@ int createWindow(std::string title, int width, int height) {
 
     const SDL_VideoInfo* info = SDL_GetVideoInfo();
     // matrix = (bool*)malloc(sizeof(bool)*M_WIDTH*M_HEIGHT);
+    Uint32 flags = SDL_OPENGL | ( fullscreen ? SDL_FULLSCREEN : 0);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
-    if(SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, SDL_OPENGL) == 0) {
+    if(SDL_SetVideoMode(width, height, info->vfmt->BitsPerPixel, flags ) == 0) {
         printf("error: %s", SDL_GetError());
         return 0;
     }
@@ -137,7 +138,7 @@ int main(int argc, char *argv[]) {
     Environment *env = mgr->getEnvironment();
     env->loadConfig("effectmaster.conf");
 
-    if (!createWindow("Effect Master 3000", env->getScreenWidth(), env->getScreenHeight()) ||
+    if (!createWindow("Effect Master 3000", env->getScreenWidth(), env->getScreenHeight(), env->isFullscreen()) ||
             !initOpenGL(env->getScreenWidth(), env->getScreenHeight())) {
         std::cout << "Error creating window!" << std::endl;
         exit(1);

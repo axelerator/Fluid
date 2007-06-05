@@ -91,6 +91,7 @@ bool Environment::loadConfig(std::string filename) {
     }
   screenWidth = globalconfig.getInteger("screenwidth");
   screenHeight = globalconfig.getInteger("screenheight");
+  fullscreen = (globalconfig.getString("fullscreen").compare("on") == 0);
   fps = globalconfig.getInteger("fps");
   matrixWidth = globalconfig.getInteger("matrixwidth");
   matrixHeight = globalconfig.getInteger("matrixheight");
@@ -154,4 +155,13 @@ std::size_t Environment::getEffectCount() {
  */
 EffectSettings * Environment::getConfigFor(std::size_t n) {
   return &(configurations.at(n));
+}
+
+
+/*!
+    \fn Environment::isFullscreen()
+ */
+bool Environment::isFullscreen()
+{
+    return fullscreen;
 }

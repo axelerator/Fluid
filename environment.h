@@ -38,6 +38,7 @@ public:
     bool getMousesimulation() const { return mousesimulation; }
     int getMouseRadius() const { return mouseRadius; }
     void updateMatrixDimensions(EffectSettings *conf);
+    bool isFullscreen();
 
   private:
     Environment();
@@ -57,6 +58,7 @@ public:
     int mouseRadius;
 
     #ifndef NOVRF
+    bool fullscreen;
       OptionSender *sender;
     #endif
 

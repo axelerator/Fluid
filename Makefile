@@ -3,7 +3,7 @@ TARGET    = fluid
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 NOVRFOBJECTS = $(SOURCES:.cpp=_novrf.o)
-INCLUDES = $(SOURCES:.cpp=.h)
+INCLUDES = $(SOURCES:.cpp=.h) $(wildcard ./vrf/include/*.h)
 
 CC = gcc
 LD = gcc
@@ -35,7 +35,7 @@ all : $(TARGET)
 $(TARGET) : $(OBJECTS)
 	$(LD) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $(TARGET)
 
-%.o: %.cpp
+%.o: %.cpp % $(INCLUDES)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $*.o $*.cpp
 
 novrf : $(TARGET)_novrf
@@ -43,7 +43,7 @@ novrf : $(TARGET)_novrf
 $(TARGET)_novrf : $(NOVRFOBJECTS)
 	$(LD) $(LDFLAGSNOVRF) $(NOVRFOBJECTS) $(NOVRFLDLIBS) -o $(TARGET)_novrf
 
-%_novrf.o : %.cpp
+%_novrf.o : %.cpp $(INCLUDES)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DNOVRF=true -c -o $*_novrf.o $*.cpp
 
 clean:

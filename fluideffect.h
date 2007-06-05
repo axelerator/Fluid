@@ -38,7 +38,6 @@ class FluidEffect : public Effect {
     void free_data ( void );
     void clear_data ( void );
     int  allocate_data ( void );
-    void draw_density ( void );
     void get_from_UI ( float * d, float * u, float * v );
 
     /* methods used to solve the equations */
@@ -70,6 +69,10 @@ class FluidEffect : public Effect {
 
     int srcXPos;
     int srcYPos;
+
+    GLfloat *vertices;
+    GLfloat *colors;
+    GLuint *indices;
 
 };
 

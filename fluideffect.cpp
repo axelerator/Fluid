@@ -38,6 +38,7 @@ FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
 
 FluidEffect::~FluidEffect() {
   free_data();
+
 }
 
 void FluidEffect::init() {
@@ -50,13 +51,46 @@ void FluidEffect::init() {
 
   allocate_data();
   clear_data ();
+
+  float xd = 4.0 / N;
+  float yd = 2.0 / N;
+
+  for (int i = 0; i < N; ++i ) {
+    for (int t = 0; t < N; ++t ) {
+      int vidx = (i*N+t)*2;
+      vertices[vidx] = t*xd - 2.0 ;
+      vertices[vidx+1] =  i * yd - 1.0;
+      vertices[vidx+2] =  0.0;
+      int cidx = (i*N+t)*3;
+      colors[cidx] = 0.2;
+      colors[cidx+1] = 0.2;
+      colors[cidx+2] = 0.2;
+    }
+  }
+
+  unsigned int currIdx = 0;
+  for (int y = 0; y < (N-1); ++y) {
+    for (int x = 0; x < N; ++x) {
+      indices[currIdx++] = y * N + x;
+      indices[currIdx++] = (y+1) * N + x;
+    }
+  }
+  
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_COLOR_ARRAY);
+  
+  glVertexPointer(2, GL_FLOAT,0, vertices);
+  glColorPointer(3, GL_FLOAT,0,colors);
 }
 
 void FluidEffect::draw() {
   glClear ( GL_COLOR_BUFFER_BIT );
   glMatrixMode ( GL_MODELVIEW );
   glLoadIdentity ();
-  draw_density();
+  //draw_density();
+  
+  for (int i = 0; i < N-1; ++i)
+   glDrawElements(GL_QUAD_STRIP, 2*N, GL_UNSIGNED_INT, indices+(2*N*i));
 }
 
 void FluidEffect::animate(int t) {
@@ -65,6 +99,14 @@ void FluidEffect::animate(int t) {
   get_from_UI ( dens_prev, u_prev, v_prev );
   vel_step ( N, u, v, u_prev, v_prev, visc, dt );
   dens_step ( N, dens, dens_prev, u, v, diff, dt );
+  
+  unsigned int stride = 3 * N;
+  for (int i=0 ; i<N ; i++ ) {
+    for (int j=0 ; j<N ; j++ ) {
+      colorize(u[IX(i,j)] , v[IX(i,j)], dens[IX(i,j)], colors + j * stride + 3 * i);
+
+     }
+  }
 }
 
 void FluidEffect::free_data () {
@@ -80,6 +122,9 @@ void FluidEffect::free_data () {
     free(dens);
   if (dens_prev)
     free(dens_prev);
+  delete[] vertices;
+  delete[] colors;
+  delete[] indices; 
 }
 
 void FluidEffect::clear_data ( void ) {
@@ -99,6 +144,10 @@ int FluidEffect::allocate_data ( void ) {
   v_prev    = (float *) malloc ( size*sizeof(float) );
   dens    = (float *) malloc ( size*sizeof(float) );
   dens_prev  = (float *) malloc ( size*sizeof(float) );
+
+  vertices = new GLfloat[N*N*2];
+  colors = new GLfloat[N*N*3];
+  indices = new GLuint[(N-1) * (N*2)];
 
   if ( !u || !v || !u_prev || !v_prev || !dens || !dens_prev ) {
       fprintf ( stderr, "cannot allocate data\n" );
@@ -122,48 +171,6 @@ void FluidEffect::colorize (float x, float y, float z, float rgb[]) {
   else {
     rgb[0] = rgb[1] = rgb[2] = 0.0;
   }
-}
-
-
-void FluidEffect::draw_density ( void ) {
-  int i, j;
-  float x, y, h, d00, d01, d10, d11;
-
-  float c0[3], c1[3], c2[3], c3[3];
-  h = 1.0f/N;
-
-  glBegin ( GL_QUADS );
-
-  for ( i=0 ; i<=N ; i++ ) {
-    x = (i-0.5f)*h;
-    for ( j=0 ; j<=N ; j++ ) {
-      y = (j-0.5f)*h;
-
-      d00 = dens[IX(i,j)];
-      d01 = dens[IX(i,j+1)];
-      d10 = dens[IX(i+1,j)];
-      d11 = dens[IX(i+1,j+1)];
-
-      colorize(u[IX(i,j)] , v[IX(i,j)],        d00, c0);
-      colorize(u[IX(i+1,j)], v[IX(i+1,j)] ,    d10, c1);
-      colorize(u[IX(i+1,j+1)], v[IX(i+1,j+1)], d11, c2);
-      colorize(u[IX(i,j+1)] , v[IX(i,j+1)] ,   d01, c3);
-
-      glColor3fv(c0);
-      glVertex2f(x * 4.0 - 2.0, y * 2.0 - 1.0);
-
-      glColor3fv(c1);
-      glVertex2f((x+h) * 4.0 - 2.0, y  * 2.0 - 1.0);
-
-      glColor3fv(c2);
-      glVertex2f((x+h) * 4.0 - 2.0, (y+h)  * 2.0 - 1.0);
-
-      glColor3fv(c3);
-      glVertex2f(x * 4.0 - 2.0, (y+h)  * 2.0 - 1.0);    
-     }
-  }
-
-  glEnd ();
 }
 
 void FluidEffect::get_from_UI(float *d, float *u, float *v) {

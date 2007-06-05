@@ -173,5 +173,9 @@ int main(int argc, char *argv[]) {
         SDL_Delay(rest);
     }
 
+    std::cout << "Shutting down Effect Master 3000..." << std::endl;
+    delete env;
+    delete mgr;
+
     return 0;
 }

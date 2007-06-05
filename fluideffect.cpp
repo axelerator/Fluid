@@ -16,11 +16,11 @@
 
 FluidEffect::FluidEffect(EffectSettings *conf): Effect() {
 
-  dt = 0.1f;
-  diff = 0.0f;
-  visc = 0.0f;
-  force = 10.0f;
-  source = 100.0f;
+  dt = conf->getFloatOrDefault("dt", 0.1f);
+  diff = conf->getFloatOrDefault("diff",0.0f);
+  visc = conf->getFloatOrDefault("visc", 0.0f);
+  force = conf->getFloatOrDefault("force", 10.0f);
+  source = conf->getFloatOrDefault("source", 100.0f);
 
   init();
 

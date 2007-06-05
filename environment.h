@@ -25,6 +25,8 @@ class Environment{
 public:
     ~Environment();
 
+    static Environment* getInstance();
+
     int getScreenWidth() const { return screenWidth; }
     int getScreenHeight() const { return screenHeight; }
     int getFps() const { return fps; }
@@ -32,7 +34,6 @@ public:
     int getMatrixHeight() const { return matrixHeight; }
     bool loadConfig(std::string filename);
     bool *getMatrix() const { return matrix; }
-    static Environment* getInstance();
     std::size_t getEffectCount();
     EffectSettings * getConfigFor(std::size_t n);
     bool getMousesimulation() const { return mousesimulation; }

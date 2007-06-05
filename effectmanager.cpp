@@ -28,7 +28,11 @@ EffectManager::EffectManager() :  currentEffect(0), currentEffectId(0){
     env = Environment::getInstance();
 }
 
-EffectManager::~EffectManager() {}
+EffectManager::~EffectManager() {
+  if (currentEffect) {
+    delete currentEffect;
+  }
+}
 
 void EffectManager::init() {
   createEffect(currentEffectId);

@@ -21,14 +21,22 @@
 Environment* Environment::instance = 0;
 
 Environment::Environment() 
-: mousesimulation(true), globalconfig(std::string("environment")), mouseRadius(10) {
+: mousesimulation(true), globalconfig(std::string("environment")), mouseRadius(10), sender(0) {
 
 }
 
 Environment::~Environment() {
   delete [] matrix;
+  if (sender) {
+    delete sender;
+    std::cout << "Tracker connection successfully closed!" << std::endl;
+  }
 }
 
+/**
+ * Returns the one and only instance of the environment.
+ * Creates a new instance if not instance is present yet.
+ */
 Environment* Environment::getInstance() {
   if (!instance) {
     instance = new Environment();
@@ -103,7 +111,7 @@ bool Environment::loadConfig(std::string filename) {
     if (!mousesimulation) {
       std::cout << "Requesting matrix: " << matrixWidth << " x " << matrixHeight << std::endl;
       sender = new OptionSender();
-      sender->SetNewOption(BOOLMATRIX,  matrixHeight, matrixWidth, matrix);
+      sender->SetNewOption(BOOLMATRIX,  matrixWidth, matrixHeight, matrix);
     }
   #else
     mousesimulation = true;
@@ -133,7 +141,7 @@ void Environment::updateMatrixDimensions(EffectSettings *conf) {
     #ifndef NOVRF
       if (!mousesimulation) {
         std::cout << "Requesting new matrix: " << matrixWidth << " x " << matrixHeight << std::endl;
-        sender->SetNewOption(BOOLMATRIX, matrixHeight, matrixWidth, newMatrix);
+        sender->SetNewOption(BOOLMATRIX, matrixWidth, matrixHeight, newMatrix);
       }
     #endif
 
@@ -161,7 +169,6 @@ EffectSettings * Environment::getConfigFor(std::size_t n) {
 /*!
     \fn Environment::isFullscreen()
  */
-bool Environment::isFullscreen()
-{
+bool Environment::isFullscreen() {
     return fullscreen;
 }

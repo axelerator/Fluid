@@ -1,15 +1,28 @@
 TARGET    = fluid
 
 SOURCES = $(wildcard *.cpp)
+
 OBJECTS = $(SOURCES:.cpp=.o)
 NOVRFOBJECTS = $(SOURCES:.cpp=_novrf.o)
-INCLUDES = $(SOURCES:.cpp=.h) $(wildcard ./vrf/include/*.h)
 
-CC = gcc
-LD = gcc
+INCLUDES = $(SOURCES:.cpp=.h)
+VRFINCLUDES = $(wildcard ./vrf/include/*.h)
+
+CC = g++
+LD = g++
+
+ifeq ($(shell uname -m),x86_64)
+	ARCH = athlon64
+endif
+
+ifeq ($(shell uname -m),i686)
+	ARCH = pentium3
+endif
+
+OPTIMIZATION = -O3 -march=$(ARCH) -falign-functions=4 -ffast-math -fforce-addr -fprefetch-loop-arrays -funroll-loops -fomit-frame-pointer
 
 CPPFLAGS = -I./
-CFLAGS = -O2 -Wall -Wextra -Werror -Wno-unused-parameter -ansi -pedantic
+CFLAGS = $(OPTIMIZATION) -Wall -Wextra -Werror -Wno-unused-parameter -ansi -pedantic
 
 # Linker flags
 LDFLAGS_LINUX    = -L/usr/X11R6/lib
@@ -35,7 +48,7 @@ all : $(TARGET)
 $(TARGET) : $(OBJECTS)
 	$(LD) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $(TARGET)
 
-%.o: %.cpp % $(INCLUDES)
+%.o: %.cpp
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $*.o $*.cpp
 
 novrf : $(TARGET)_novrf
@@ -43,7 +56,7 @@ novrf : $(TARGET)_novrf
 $(TARGET)_novrf : $(NOVRFOBJECTS)
 	$(LD) $(LDFLAGSNOVRF) $(NOVRFOBJECTS) $(NOVRFLDLIBS) -o $(TARGET)_novrf
 
-%_novrf.o : %.cpp $(INCLUDES)
+%_novrf.o : %.cpp
 	$(CC) $(CPPFLAGS) $(CFLAGS) -DNOVRF=true -c -o $*_novrf.o $*.cpp
 
 clean:

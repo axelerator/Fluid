@@ -1,9 +1,11 @@
 #include "RGBAbmpLoader.h"
 
+#include <stdlib.h>
 #include <iostream>
 #include <fstream>
 #include <string> 
- using namespace std;
+
+using namespace std;
  
 RGBAbmp *loadBmp(string filename) {
   RGBAbmp *result    = new RGBAbmp;

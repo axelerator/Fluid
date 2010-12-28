@@ -10,6 +10,8 @@
 //
 //
 #include "simplesparkle.h"
+
+#include <stdlib.h>
 #include <iostream>
 #include "RGBAbmpLoader.h"
 #include <math.h>

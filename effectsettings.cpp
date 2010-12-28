@@ -11,6 +11,8 @@
 //
 #include "effectsettings.h"
 
+#include <stdlib.h>
+
 std::string EffectSettings::undefined("undefined");
 
 EffectSettings::EffectSettings(std::string name) : name(name) {}

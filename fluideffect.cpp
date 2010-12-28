@@ -10,8 +10,10 @@
 //
 //
 #include "fluideffect.h"
+
 #include "GL/gl.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 FluidEffect::FluidEffect(EffectSettings *conf): Effect() {

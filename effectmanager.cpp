@@ -10,6 +10,9 @@
 //
 //
 #include <GL/glew.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "effectmanager.h"
 #include "environment.h"
 #include "effect.h"

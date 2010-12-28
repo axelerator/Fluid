@@ -32,7 +32,7 @@ LDFLAGS          = $(LDFLAGS_COMMON) $(LDFLAGS_$(OS))
 LDFLAGSNOVRF	 = $(LDFLAGS_$(OS))
 
 # Linker libraries
-XLIBS            = -lXmu -lXi -lX11
+XLIBS            = -lX11
 GLLIBS           = -lGLEW -lGLU -lGL -lSDL
 LDLIBS           = $(GLLIBS) $(XLIBS) -lvrf -lm
 NOVRFLDLIBS	 = $(GLLIBS) $(XLIBS) -lm

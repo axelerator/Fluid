@@ -10,6 +10,8 @@
 //
 //
 #include "waveeffect.h"
+
+#include <stdlib.h>
 #include <math.h>
 #include "RGBAbmpLoader.h"
 

@@ -11,6 +11,8 @@
 //
 #include "areadetector.h"
 
+#include <string.h>
+
 /**
  * Creates an areadetector.
  *
@@ -73,7 +75,7 @@ void AreaDetector::update() {
       unsigned int minY = newObjects[i].y < oldObjects[j].y ? newObjects[i].y : oldObjects[j].y;
 
       // Check if the object is within the range specified by threshold.
-      float dist = sqrt( (maxX - minX)^2 + (maxY - minY)^2 );
+      float dist = sqrt( ((maxX - minX)^2) + ((maxY - minY)^2) );
       if(dist < threshold) {
         found = true;
       }

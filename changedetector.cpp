@@ -12,6 +12,7 @@
 #include "changedetector.h"
 
 #include <math.h>
+#include <string.h>
 
 /**
  * Creates a changedetector.
